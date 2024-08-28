@@ -1,0 +1,24 @@
+---
+const { title, href } = Astro.props;
+
+// Split the site title on the period e.g. "veryth.ink" and
+// grab the last char of the first section so we can apply
+// tighter letter spacing to the middle, basically manual "kerning" :P
+const titleSplit = title.split('.');
+const first = titleSplit[0];
+const last = titleSplit[1];
+---
+
+<h1 class="text-4xl decoration-orange-600 decoration-4 underline-offset-7 underline">
+  <a { href }>
+    <div class="flex flex-row relative">
+      <div class="">{first}</div>
+      <div class="w-0.5 relative">
+        <div class="w-3.5 w-4 bg-orange-50 dark:bg-stone-900 absolute -left-1.5 -bottom-0.5">
+          <div class="w-2 h-2 m-auto bg-orange-300 dark:bg-orange-900 rounded-sm relative"></div>
+        </div>
+      </div>
+      <div>{last}</div>
+    </div>
+  </a>
+</h1>

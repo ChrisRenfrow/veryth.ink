@@ -1,0 +1,59 @@
+---
+title: "How I track my time"
+description: "Without leaving the command-line, recorded in plain-text. I share some features from some tools I've discovered in my time-tracking journey."
+published_on: 2023-10-27
+category: workflow
+tags: [ "tools", "cli", "blaggregate" ]
+---
+
+Recently, I discovered I had a problem. I would make it to the end of my day and feel incredibly underaccomplished. It wasn't that I hadn't done anything, it just felt like I could have accomplished more. So I decided to start tracking how much time I spent on my tasks so that I could see just how many hours I was actually investing on things that mattered to me.
+
+At this point, a part of me knew I *should* have just taken out the paper and pencil, marking down when I started and stopped a task, and increase complexity from there as my needs grew. But I was already familiar with a tool for this task, and I knew I would want to digitize these records anyway, so I decided to use a tool called [timewarrior](https://github.com/GothenburgBitFactory/timewarrior/).
+
+# timewarrior
+I don't recommend fighting time, it always wins. Combative titles aside, this tool is a delight to use. It has wonderful [documentation](https://timewarrior.net/docs/) (both online and off), and the commands are pretty simple to use. It doesn't bother you with a bunch of configuration up-front, just `timew start [<tag>...]` and you're tracking time!
+
+One of the nice things about using a command-line time-tracking tool like this is that you can get all the granularity of "I launched this application and worked inside it for N-minutes" without granting global tracking measures. By invoking your favorite editor via the command-line, you're already halfway to tracking your usage with it. By setting an alias for the program you want to track to `timew start [<tags>...] && $program_name && timew stop`[^1] you will now know exactly how long you spend in your editor (or waiting for `cargo build` to finish).
+
+But perhaps one of the nicer things about timewarrior is the way it stores the data.
+
+# plain-text
+Timewarrior stores all of the information you generate as easy to parse plain-text, something I feel people take for granted at times. Maybe this sounds familiar, you've come to use and enjoy a service or a program and have become somewhat reliant on it, but something changes that makes it less pleasant to use. You try looking for an alternative only to find that you can't just pick up your information and move, you'd have to start from scratch. Thankfully this is not the case with timewarrior. This is a sample of the data timewarrior generates and places in an easy to find location (`~/.timewarrior/data/` in my case):
+
+```txt
+inc 20231023T182108Z - 20231023T202734Z # code guix learning
+inc 20231023T202932Z - 20231023T212625Z # break meal
+inc 20231023T212625Z - 20231023T222221Z # "coding-career-handbook" reading
+inc 20231023T223352Z - 20231023T231437Z # chores cleaning dishes
+```
+
+This format is incredibly easy to parse, I have the freedom to do whatever I want with this data, and that's a *very* good thing!
+
+For more on this topic, check out [this video](https://youtube.com/watch?v=WgV6M1LyfNY) from *No Boilerplate*, someone who inspires me quite a lot.
+
+# termdown
+One of the other things I find myself doing frequently is setting a timer on my phone to limit how much I browse Zulip, or how long I take solving problems on LeetCode. But using my phone for this is liable to distract me at a time when I'm most vulnerable to distraction. I could always buy an egg timer, but that's something I won't always have (or think to carry) on me, nor is it practical to use in say, a coffee shop. So again, I turned to the terminal and discovered [`termdown`](https://github.com/trehn/termdown). Again, delightfully simple to use (the hardest part for me was remembering the name!), just `termdown <duration>` and you have a large format ASCII timer ticking down the minutes/seconds. It also functions as a stopwatch if you give it no duration, a nice bonus!
+
+{{ embed_image(
+    path="termdown.png", 
+    alt="Time remaining smoothly rendered in ASCII characters. It reads '4m 42s'", 
+    caption="A screenshot of `termdown` in action") }}
+
+But of course, you can pair this with `timew` to track your time allowances in a way that is resilient to interruptions. Similarly as above, you would simply invoke `timew start [<tag>...]; termdown <duration> && timew stop`. If you interrupt your timer for any reason, the time spent is still recorded, you don't have to remember to edit anything, you can rest easy!
+
+# summarize your day/week
+
+{{ embed_image(
+    path="timew-week.png", 
+    alt="A graph rendered in the terminal that represents every hour (x-axis) of every day (y-axis) for one week. Various horizontal bars with short labels populate some of the days indicating time tracked", 
+    caption="An example of the output from `timew day`") }}
+
+When you've tracked your day or week, you can look back on how it went in glorious 256-color output with `timew [day|week]`. It helpfully shows the total time tracked, what is still available, and the total amount of time available to track in the day/week.[^2] And if you want to export your activity from any range of time to use elsewhere (in JSON), you can easily accomplish that with the `export` command (e.g. `timew export from 2023-10-26 for 24h`). If you're familiar with [`jq`](https://github.com/jqlang/jq) you can easily transform this data however you please, right from the command-line!
+
+# conclusion 
+
+I'm happy to have discovered timewarrior because it makes keeping an account of my time easy and the data it generates is portable, and I've only begun to scratch the surface! Now that it's easy to record how I use my time, my next goal is to discover effective ways to consume the data I generate. If you, dear reader, have gone down this rabbit hole before, I would love to hear from you! Feel free to get in touch with me using any of the methods [here](/about#other-places-to-find-me). Or if you're a recurser, ping me in zulip!
+
+[^1]: This doesn't work if your program automatically backgrounds on invocation!
+
+[^2]: The total amount of time for a day/week doesn't usually change on its own, this is changed by setting [exclusion zones](https://timewarrior.net/docs/workweek/). I recommend doing this to automatically truncate runaway tasks you may have forgotten to stop. It also has the nice effect of giving you a more realistic target for tracking coverage.

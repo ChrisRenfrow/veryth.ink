@@ -1,0 +1,113 @@
+---
+title: "RC W1'23 | Wk 2/14"
+description: "Reflecting on week two of my second batch at RC."
+published_on: 2023-11-16
+category: check-in
+tags: [ "recurse_center", "blaggregate", "w1'23", "rust" ]
+---
+
+Yes, this post is more than a bit late, for reasons I will explain in the next summary or perhaps as its own post. Suffice it to say I made a choice, which led to me not having access to a functional machine for nearly 5 days!
+
+**TLDR;** 
+Had a stronger start to my week towards my batch goals. Did more pairing and coffee-chats than I did in week one and it felt like a good balance. I would have liked to have had even more to show for my second week, but over-all, I felt good where it ended.
+
+---
+
+# Day 6 (Mon, 6th)
+I attended a couple events, **Planning Your Batch** and **Saying "No" Party**. The saying no party was all about spending some time to just, say no to the excess noise going on around us, mostly on Zulip. It was nice to be able to share what I had learned about Zulip with the others and just spend some time making things a little quieter for myself. After that I decided to write some code to represent a deck of cards. Originally I set out to do this as a first step toward making a game of solitaire. But by the end I had questions like "what makes a good shuffle algorithm?", and "how do I tell how shuffled a deck of cards actually is?". After attempting to implement my own shuffle algorithm I ended-up looking elsewhere and learned of the elegant [Fisher-Yates Shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle), which I went ahead and implemented for my deck of cards.
+
+```rs
+// ...
+fn shuffle(&mut self, mut rng: impl Rng) {
+    for i in (0..self.deck.len()).rev() {
+        let j = rng.gen_range(i..self.deck.len());
+        self.deck.swap(i, j);
+    }
+}
+// ...
+```
+
+The debug output demonstrating the shuffle, lightly edited to improve readability.
+```txt
+---- tests::shuffle stdout ----
+// Un-shuffled
+|AH|2H|3H|4H|5H|6H|7H|8H|9H|XH|JH|QH|KH|
+|AD|2D|3D|4D|5D|6D|7D|8D|9D|XD|JD|QD|KD|
+|AS|2S|3S|4S|5S|6S|7S|8S|9S|XS|JS|QS|KS|
+|AC|2C|3C|4C|5C|6C|7C|8C|9C|XC|JC|QC|KC|
+// Shuffled
+|5H|XH|3D|6C|AD|7S|6S|4H|6D|4D|AS|QD|3S|
+|8H|XD|QH|3C|7C|KH|JD|KC|7D|9S|9C|2S|4C|
+|JH|QC|2D|5C|XS|JC|8C|XC|KD|5S|7H|5D|AH|
+|JS|8D|6H|4S|9H|AC|2C|QS|KS|9D|2H|8S|3H|
+```
+
+*Yes, I know the unshuffled deck doesn't adhere to the USPCC standard 52-card deck order. I fixed this later.*
+
+In the background I was also working on printing out half of a keyboard case for the split keyboard kit I ordered just before my batch started.
+
+# Day 7 (Tue, 7th)
+
+I paired with a recurser on their Rust project, they wanted to implement some basic P2P netcode for their two-player game and I helped navigate as best as I could. Later I did some more work on the card deck "simulation". As I mentioned above, I realized that I initialized the cards in an order not [standard for USPCC playing cards](https://ambitiouswithcards.com/new-deck-order/) so I amended that, *very* important. I also printed the other side of my keyboard case.
+
+{{ embed_image(
+    path="keyboard-case.jpg",
+    alt="Two halves of an ergonomic split keyboard case, 3D-printed using a shiny blue, purple, and red filament"
+    caption="Both halves of the case. Total print time of about 4.5h. I really like this filament!"
+) }}
+
+# Day 8 (Wed, 8th)
+
+Today I would have attended creative coding, but my ISP had other plans. So I worked on something offline with the creative coding framework, [nannou](https://nannou.cc/). The prompt was *"You can only make one dot at a time"*, which gave me an idea to try rendering the outline of an arbitrary shape one dot at a time. I wanted to do this by calculating the intersection of the shape's path with a sweeping/rotating line and placing a dot for each intersection. I wanted the result to look a little like what's called a [Persistence of Vision](https://en.wikipedia.org/wiki/Persistence_of_vision) illusion, similar to the animation below but in a circle.
+
+![sequence of photographs of a S.W.I.M. (linear array of computer-controlled lamps) being waved back-and-forth while imprinting content upon the naked eye](https://upload.wikimedia.org/wikipedia/commons/3/38/SittingWaveTwoCycles.gif)
+
+> sequence of photographs of a S.W.I.M. (linear array of computer-controlled lamps) being waved back-and-forth while imprinting content upon the naked eye \
+> ~ **[Wikipedia](https://en.wikipedia.org/wiki/Persistence_of_vision)** 
+
+This was one of the first times I used nannou without running into graphics driver issues, additionally I'm not very familiar with graphics programming math, so it was a struggle for me. By the time everyone was already beginning to reconvene the internet improved and I was able to share what I had.
+
+{{ embed_image(
+    path="one-dot-at-a-time.gif", 
+    alt="My creative code submission in action. It's a kind of salmon-ish background with white dots appearing at regular intervals where a thin black line intersects with an invisible path of a square", 
+    caption="My creative code submission in action, such as it is! If you watch closely you can just make out that the outline is a square."
+) }}
+    
+The rest of the day I started playing with [Bevy](https://bevyengine.org/) in an attempt to start making a card-game interface. This mostly consisted of pulling up their example projects and learning what the Bevy workflow looks like.
+
+# Day 9 (Thu, 9th)
+
+I paired on my card deck code with a recurser. We worked on figuring out how to display a simple graph representing the [entropy](https://en.wikipedia.org/wiki/Entropy_(information_theory)) of a deck after repeated shuffles, the goal of which was to allow me to test different shuffle algorithms against each-other and quickly see how each performs. We didn't get that far on that goal, but my pairing partner had the excellent idea of using emojis to the display output which turned out *quite* nice.
+
+```txt
+---- tests::shuffle stdout ----
+Before Shuffle
+Deck:
+|A♠️|2♠️|3♠️|4♠️|5♠️|6♠️|7♠️|8♠️|9♠️|X♠️|J♠️|Q♠️|K♠️|
+|A♦️|2♦️|3♦️|4♦️|5♦️|6♦️|7♦️|8♦️|9♦️|X♦️|J♦️|Q♦️|K♦️|
+|A♣️|2♣️|3♣️|4♣️|5♣️|6♣️|7♣️|8♣️|9♣️|X♣️|J♣️|Q♣️|K♣️|
+|A♥️|2♥️|3♥️|4♥️|5♥️|6♥️|7♥️|8♥️|9♥️|X♥️|J♥️|Q♥️|K♥️|
+
+Drawn:
+Empty
+
+After Shuffle
+Deck:
+|J♠️|4♠️|A♥️|4♣️|6♦️|5♣️|8♠️|J♥️|3♦️|2♦️|9♠️|7♥️|8♥️|
+|K♠️|2♣️|7♣️|A♦️|J♣️|9♥️|3♠️|7♦️|K♥️|K♦️|3♣️|4♥️|6♥️|
+|5♥️|4♦️|A♠️|X♣️|J♦️|Q♦️|K♣️|9♣️|8♣️|X♠️|3♥️|5♦️|X♥️|
+|A♣️|5♠️|9♦️|2♥️|7♠️|6♠️|8♦️|2♠️|6♣️|Q♠️|Q♥️|Q♣️|X♦️|
+
+Drawn:
+Empty
+```
+
+Later, I paired with another recurser as we started adding enhanced logging to `zulipsis` using the `log4rs` crate. I got the impression about halfway through that maybe it was a bit overkill for my needs. But it was fun to explore a new crate with someone peering over my shoulder.
+
+# Day 10 (Fri, 10th)
+
+I woke up to some intense hand-pain that made it difficult to give my full attention to typing anything, so I just took a break for the day. I was feeling satisfied with my week anyway so I used the time to catch up on some reading and house-chores.
+
+# Summary
+
+Alright, that's all I've got for now. Not going to reflect too much here as I'm writing this nearly at the end of the week for the following week (whoops)! I like that I had more *things* to show and tell this week. That feels good. I hope every week I can have some fun things to share.

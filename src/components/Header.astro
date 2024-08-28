@@ -1,0 +1,24 @@
+---
+import siteInfo from '~/data/site-info.ts';
+
+import FancySiteTitle from '@components/FancySiteTitle.astro';
+
+const { name, navigation } = siteInfo;
+---
+
+<header class="w-full mx-auto pb-10">
+  <nav class="flex flex-col md:flex-row justify-between content-center">
+    <FancySiteTitle title={ name } href='/' />
+    <ol class="flex flex-row text-xl" >
+      {navigation.map(el =>
+        <li class="">
+          <a class:list={[
+            "underline p-1 decoration-2 decoration-orange-600",
+          ]} href={el.url}>
+            {el.name}
+          </a>
+        </li>
+      )}
+    </ol >
+  </nav>
+</header>

@@ -1,0 +1,48 @@
+---
+import TocHeading from '@components/TocHeading.astro';
+
+interface Props {
+  headings: { depth: int; slug: string; text: string; }
+}
+
+// Takes an array of headings and rebuilds them as a nested
+// structure for easier rendering
+function unflattenHeadings(headings) {
+  // TODO: Normalize headings so that I don't always have to start at h1
+  if (headings && headings.filter(h => h.depth === 1).length === 0) {
+    return [];
+  }
+  // All the top-level headings (depth == 1)
+  const topHeadings = [];
+  // Tracks the state of current heading ancestors keyed
+  // by depth
+  const parentHeadings = new Map();
+  headings.forEach((h) => {
+    // Add a sub_headings attribute
+    const heading = { ...h, sub_headings: [] };
+    // Set the current heading keyed by depth (see above)
+    parentHeadings.set(heading.depth, heading);
+    // If this is a top-level heading, push to topHeadings
+    if (heading.depth === 1) {
+      topHeadings.push(heading);
+    } else {
+      // Otherwise we go ahead and push this heading as a
+      // child of it's direct ancestor
+      parentHeadings.get(heading.depth - 1).sub_headings.push(heading);
+    }
+  });
+  // Return all the top-level headings with their now nested children
+  return topHeadings;
+}
+
+const { headings } = Astro.props as Props;
+const toc = unflattenHeadings(headings);
+---
+
+<nav>
+  <ul>
+    { toc.map(heading => (
+      <TocHeading {heading} />
+    )) }
+  </ul>
+</nav>

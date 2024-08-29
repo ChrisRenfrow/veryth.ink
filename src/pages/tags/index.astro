@@ -1,0 +1,37 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { getAllPosts } from "~/helpers/queries";
+import { slugify } from "~/helpers/utils";
+
+const posts = await getAllPosts();
+
+const tagMap: Map<string, string> = new Map();
+
+posts.forEach((post) => {
+  let tags = post.data.tags;
+  tags &&
+    tags.forEach(
+      (tag: string) =>
+        tagMap.has(slugify(tag)) || tagMap.set(slugify(tag), tag),
+    );
+});
+
+const tags: string[][] = Array.from(tagMap).sort((a, b) => {
+  let aUpper = a[0].toUpperCase();
+  let bUpper = b[0].toUpperCase();
+  return aUpper < bUpper ? -1 : aUpper > bUpper ? 1 : 0;
+});
+---
+
+<BaseLayout>
+  <h1 class="text-4xl pb-5">all tags</h1>
+  <div class="text-2xl grid grid-cols-2 grid-flow-row gap-3">
+    {
+      tags.map((tag) => (
+        <a class="text-orange-600 underline" href={`/tag/${tag[0]}`}>
+          #{tag[1]}
+        </a>
+      ))
+    }
+  </div>
+</BaseLayout>

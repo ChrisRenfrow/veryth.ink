@@ -1,53 +1,67 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection } from 'astro:content'
 
-import BaseLayout from '@layouts/BaseLayout.astro';
-import PostList from '@components/PostList.astro';
+import BaseLayout from '@layouts/BaseLayout.astro'
+import PostList from '@components/PostList.astro'
 
-import { getAllPosts } from '~/helpers/queries.js';
+import { getAllPosts } from '~/helpers/queries.js'
 
 export async function getStaticPaths() {
-  const posts =  await getAllPosts();
-  const postsPerPage = 8;
-  const numPages = Math.ceil(posts.length / postsPerPage);
+  const posts = await getAllPosts()
+  const postsPerPage = 8
+  const numPages = Math.ceil(posts.length / postsPerPage)
 
-  const range = (start, stop, step) =>
-    Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step);
+  const range = (start: number, stop: number, step: number) =>
+    Array.from(
+      { length: (stop - start) / step + 1 },
+      (_, i) => start + i * step,
+    )
 
-  return range(0, numPages, 1).map(pageIdx => {
-    const pageNum = pageIdx + 1;
+  return range(0, numPages, 1).map((pageIdx) => {
+    const pageNum = pageIdx + 1
 
-    return ({
+    return {
       params: { page: pageNum },
       props: {
         posts: posts.slice(
           pageIdx * postsPerPage,
-          pageIdx * postsPerPage + postsPerPage),
-        next: (pageNum < numPages) ? { href: `/blog/page/${pageNum + 1}` } : null,
-        prev: (pageNum > 1) ? { href: `/blog/page/${pageNum - 1}` } : null,
+          pageIdx * postsPerPage + postsPerPage,
+        ),
+        next: pageNum < numPages ? { href: `/blog/page/${pageNum + 1}` } : null,
+        prev: pageNum > 1 ? { href: `/blog/page/${pageNum - 1}` } : null,
         currentPage: pageNum,
         totalPages: numPages,
-      }
-    })
+      },
+    }
   })
 }
 
-const { posts, totalPages, currentPage, prev, next } = Astro.props;
+const { posts, totalPages, currentPage, prev, next } = Astro.props
 ---
 
 <BaseLayout>
   <div class="grow flex flex-col">
-    <PostList { posts } />
+    <PostList {posts} />
     <div class="flex flex-row justify-between py-10">
       <a
         class="underline decoration-orange-700"
-        class:list={{'no-underline text-stone-300 dark:text-stone-600': !prev}}
-        href={prev && prev.href}>&larr; prev</a>
-      <a>{`${String(currentPage).padStart(2, '0')} of ${String(totalPages).padStart(2, '0')}`}</a>
+        class:list={{
+          'no-underline text-stone-300 dark:text-stone-600': !prev,
+        }}
+        href={prev && prev.href}>&larr; prev</a
+      >
+      <a
+        >{
+          `${String(currentPage).padStart(2, '0')} of ${String(totalPages).padStart(2, '0')}`
+        }</a
+      >
       <a
         class="underline decoration-orange-700"
-        class:list={{'no-underline text-stone-300 dark:text-stone-600': !next}}
-        href={next && next.href}>next &rarr;</a>
+        class:list={{
+          'no-underline text-stone-300 dark:text-stone-600': !next,
+        }}
+        href={next && next.href}>next &rarr;</a
+      >
     </div>
   </div>
 </BaseLayout>

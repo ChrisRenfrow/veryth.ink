@@ -1,48 +1,57 @@
 ---
-import TocHeading from '@components/TocHeading.astro';
+import TocHeading from '@components/TocHeading.astro'
+import type { NavigationTypeString } from 'astro:transitions/client'
 
 interface Props {
-  headings: { depth: int; slug: string; text: string; }
+  headings: Heading[]
+}
+
+type Heading = {
+  depth: number
+  slug: string
+  text: string
+}
+
+export type NestedHeading = Heading & {
+  sub_headings: NestedHeading[]
 }
 
 // Takes an array of headings and rebuilds them as a nested
 // structure for easier rendering
-function unflattenHeadings(headings) {
+function unflattenHeadings(headings: Heading[]) {
   // TODO: Normalize headings so that I don't always have to start at h1
-  if (headings && headings.filter(h => h.depth === 1).length === 0) {
-    return [];
+  if (headings && headings.filter((h) => h.depth === 1).length === 0) {
+    return []
   }
   // All the top-level headings (depth == 1)
-  const topHeadings = [];
+  const topHeadings: NestedHeading[] = []
   // Tracks the state of current heading ancestors keyed
   // by depth
-  const parentHeadings = new Map();
+  const parentHeadings = new Map()
   headings.forEach((h) => {
     // Add a sub_headings attribute
-    const heading = { ...h, sub_headings: [] };
+    const heading = { ...h, sub_headings: [] }
     // Set the current heading keyed by depth (see above)
-    parentHeadings.set(heading.depth, heading);
+    parentHeadings.set(heading.depth, heading)
     // If this is a top-level heading, push to topHeadings
     if (heading.depth === 1) {
-      topHeadings.push(heading);
+      topHeadings.push(heading)
     } else {
       // Otherwise we go ahead and push this heading as a
       // child of it's direct ancestor
-      parentHeadings.get(heading.depth - 1).sub_headings.push(heading);
+      parentHeadings.get(heading.depth - 1).sub_headings.push(heading)
     }
-  });
+  })
   // Return all the top-level headings with their now nested children
-  return topHeadings;
+  return topHeadings
 }
 
-const { headings } = Astro.props as Props;
-const toc = unflattenHeadings(headings);
+const { headings } = Astro.props
+const toc = unflattenHeadings(headings)
 ---
 
 <nav>
   <ul>
-    { toc.map(heading => (
-      <TocHeading {heading} />
-    )) }
+    {toc.map((heading) => <TocHeading {heading} />)}
   </ul>
 </nav>

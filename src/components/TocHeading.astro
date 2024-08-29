@@ -1,29 +1,28 @@
 ---
+import type { NestedHeading } from './Toc.astro'
+
 export interface Props {
-  heading: {
-    text: string;
-    slug: string;
-    depth: int;
-    sub_headings: self.heading;
-  }
-  list_type: string;
+  heading: NestedHeading
 }
 
-const { heading } = Astro.props;
+const { heading } = Astro.props
 ---
 
 <li>
   <p class="pl-1">
-    <a class="underline decoration-orange-600 decoration-2" href={`#${heading.slug}`}>
+    <a
+      class="underline decoration-orange-600 decoration-2"
+      href={`#${heading.slug}`}
+    >
       {heading.text}
     </a>
   </p>
   {
-    (heading.sub_headings.length > 0) && (
+    heading.sub_headings.length > 0 && (
       <ul class="pl-2">
-        { heading.sub_headings.map(sub_heading => (
+        {heading.sub_headings.map((sub_heading) => (
           <Astro.self heading={sub_heading} />
-        )) }
+        ))}
       </ul>
     )
   }

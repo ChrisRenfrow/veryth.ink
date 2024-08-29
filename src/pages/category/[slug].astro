@@ -1,43 +1,45 @@
 ---
-import BaseLayout from '@layouts/BaseLayout.astro';
+import BaseLayout from '@layouts/BaseLayout.astro'
 
-import PostList from '@components/PostList.astro';
+import PostList from '@components/PostList.astro'
 
-import { getCollection } from 'astro:content';
-import { getAllPosts } from '~/helpers/queries.js';
-import { slugify, pluralize } from '~/helpers/utils.js';
+import { getCollection } from 'astro:content'
+import { getAllPosts } from '~/helpers/queries.js'
+import { slugify, pluralize } from '~/helpers/utils.js'
 
 export async function getStaticPaths() {
-  const posts = await getAllPosts();
-  const categoryListings = new Map();
+  const posts = await getAllPosts()
+  const categoryListings = new Map()
 
-  posts.forEach(post => {
-    const catSlug = post.data.category ? slugify(post.data.category) : 'uncategorized';
-    catSlug === 'uncategorized' && console.log(post.slug, "is uncategorized")
+  posts.forEach((post) => {
+    const catSlug = post.data.category
+      ? slugify(post.data.category)
+      : 'uncategorized'
+    catSlug === 'uncategorized' && console.log(post.slug, 'is uncategorized')
     if (categoryListings.has(catSlug)) {
-      categoryListings.get(catSlug).push(post);
+      categoryListings.get(catSlug).push(post)
     } else {
-      categoryListings.set(catSlug, [post]);
+      categoryListings.set(catSlug, [post])
     }
-  });
+  })
 
-  console.log(Array.from(categoryListings).forEach(catList => console.log(catList[0], catList[1].length)))
-
-  return Array.from(categoryListings.entries()).map(category => ({
+  return Array.from(categoryListings.entries()).map((category) => ({
     params: { slug: category[0] },
     props: {
       category: category[0],
       posts: category[1],
-    }}))
+    },
+  }))
 }
 
-
-const { category, posts } = Astro.props;
-
+const { category, posts } = Astro.props
 ---
 
 <BaseLayout>
-  <h1 class="text-2xl font-bold pb-5">category/{category} ({posts.length} {pluralize("post", posts.length)})</h1>
+  <h1 class="text-2xl font-bold pb-5">
+    category/{category} ({posts.length}
+    {pluralize('post', posts.length)})
+  </h1>
   <hr class="border-stone-400 border-t-2 pb-5" />
-  <PostList { posts } />
+  <PostList {posts} />
 </BaseLayout>

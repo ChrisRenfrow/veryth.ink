@@ -1,42 +1,45 @@
 ---
-import BaseLayout from '@layouts/BaseLayout.astro';
+import BaseLayout from '@layouts/BaseLayout.astro'
 
-import PostList from '@components/PostList.astro';
+import PostList from '@components/PostList.astro'
 
-import { getCollection } from 'astro:content';
-import { getAllPosts } from '~/helpers/queries.js';
-import { slugify, pluralize } from '~/helpers/utils.js';
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+import { getAllPosts } from '~/helpers/queries.js'
+import { slugify, pluralize } from '~/helpers/utils.js'
 
 export async function getStaticPaths() {
-  const posts = await getAllPosts();
-  const tagListings = new Map();
+  const posts: CollectionEntry<'blog'>[] = await getAllPosts()
+  const tagListings = new Map()
 
-  posts.forEach(post => {
-    post.data.tags && post.data.tags.forEach(tag => {
-      const tagSlug = slugify(tag);
-      if (tagListings.has(tagSlug)) {
-        tagListings.get(tagSlug).push(post);
-      } else {
-        tagListings.set(tagSlug, [post]);
-      }
-    });
-  });
+  posts.forEach((post) => {
+    post.data.tags &&
+      post.data.tags.forEach((tag: string) => {
+        const tagSlug = slugify(tag)
+        if (tagListings.has(tagSlug)) {
+          tagListings.get(tagSlug).push(post)
+        } else {
+          tagListings.set(tagSlug, [post])
+        }
+      })
+  })
 
-  return Array.from(tagListings.entries()).map(tagListing => ({
+  return Array.from(tagListings.entries()).map((tagListing) => ({
     params: { slug: tagListing[0] },
     props: {
       tag: tagListing[0],
       posts: tagListing[1],
-    }}));
+    },
+  }))
 }
 
-
-const { tag, posts } = Astro.props;
-
+const { tag, posts } = Astro.props
 ---
 
 <BaseLayout>
-  <h1 class="text-2xl font-bold pb-5">tag/{tag} ({posts.length} {pluralize("post", posts.length)})</h1>
+  <h1 class="text-2xl font-bold pb-5"
+    >tag/{tag} ({posts.length} {pluralize('post', posts.length)})</h1
+  >
   <hr class="border-stone-400 border-t-2 pb-5" />
-  <PostList { posts } />
+  <PostList {posts} />
 </BaseLayout>

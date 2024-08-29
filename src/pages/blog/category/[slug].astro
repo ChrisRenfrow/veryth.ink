@@ -1,14 +1,13 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro'
-
 import PostList from '@components/PostList.astro'
 
-import { getCollection } from 'astro:content'
+import { type CollectionEntry } from 'astro:content'
 import { getAllPosts } from '~/helpers/queries.js'
-import { slugify, pluralize } from '~/helpers/utils.js'
+import { pluralize, slugify } from '~/helpers/utils.js'
 
 export async function getStaticPaths() {
-  const posts = await getAllPosts()
+  const posts: CollectionEntry<'blog'>[] = await getAllPosts()
   const categoryListings = new Map()
 
   posts.forEach((post) => {

@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro'
 import type { CollectionEntry } from 'astro:content'
+
 import { getAllPosts } from '~/helpers/queries'
 import { slugify } from '~/helpers/utils'
 
 const posts: CollectionEntry<'blog'>[] = await getAllPosts()
-
 const tagMap: Map<string, string> = new Map()
 
 posts.forEach((post) => {
@@ -29,7 +29,7 @@ const tags: string[][] = Array.from(tagMap).sort((a, b) => {
   <div class="text-2xl grid grid-cols-2 grid-flow-row gap-3">
     {
       tags.map((tag) => (
-        <a class="text-orange-600 underline" href={`/tag/${tag[0]}`}>
+        <a class="text-orange-600 underline" href={`/blog/tag/${tag[0]}`}>
           #{tag[1]}
         </a>
       ))

@@ -26,9 +26,9 @@ const { posts, baseUrl = '/blog' } = Astro.props
         <div class:list={{ hidden: !post.data.category }}>
           <a
             class="text-sm text-stone-500 dark:text-stone-400 underline decoration-1 font-bold"
-            href={`/category/${post.data.category}`}
+            href={`${baseUrl}/category/${post.data.category}`}
           >
-            #{post.data.category}
+            /{post.data.category}
           </a>
         </div>
         <p class="text-stone-500">{post.data.description}</p>

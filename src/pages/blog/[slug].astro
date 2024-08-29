@@ -1,14 +1,13 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content'
+import { type CollectionEntry } from 'astro:content'
 
-import BaseLayout from '@layouts/BaseLayout.astro'
-import Toc from '@components/Toc.astro'
 import FormattedDate from '@components/FormattedDate.astro'
+import Toc from '@components/Toc.astro'
+import BaseLayout from '@layouts/BaseLayout.astro'
+import { getAllPosts } from '~/helpers/queries'
 
 export async function getStaticPaths() {
-  const posts = (await getCollection('blog')).sort(
-    (a, b) => b.data.published_on.valueOf() - a.data.published_on.valueOf(),
-  )
+  const posts: CollectionEntry<'blog'>[] = await getAllPosts()
 
   return posts.map((post) => ({
     params: { slug: post.slug },
@@ -37,7 +36,7 @@ const hasTags = !!post.data.tags
         <h3>
           <a
             class="underline decoration-orange-600 decoration-2"
-            href={`/category/${post.data.category}`}
+            href={`/blog/category/${post.data.category}`}
           >
             /{post.data.category}
           </a>
@@ -76,8 +75,8 @@ const hasTags = !!post.data.tags
             <div class="pl-1 flex flex-wrap">
               {post.data.tags.map((tag: string) => (
                 <a
-                  class="after:content-[','] after:dark:text-stone-300 after:text-stone-500 after:last:content-[''] text-orange-600 pr-1"
-                  href={`/tag/${tag}`}
+                  class="after:content-[','] after:dark:text-stone-300 after:text-stone-500 after:last:content-[''] text-orange-600 pr-1 after:ml-[-0.55em]"
+                  href={`/blog/tag/${tag}`}
                 >
                   #{tag}
                 </a>

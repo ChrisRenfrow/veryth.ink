@@ -9,7 +9,7 @@ const posts: CollectionEntry<'blog'>[] = await getAllPosts()
 const catMap: Map<string, string> = new Map()
 
 posts.forEach((post) => {
-  let category = post.data.category
+  let category = post.data.category ?? 'uncategorized'
   catMap.has(slugify(category)) || catMap.set(slugify(category), category)
 })
 

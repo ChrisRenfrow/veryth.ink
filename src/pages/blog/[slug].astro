@@ -5,6 +5,7 @@ import FormattedDate from '@components/FormattedDate.astro'
 import Toc from '@components/Toc.astro'
 import BaseLayout from '@layouts/BaseLayout.astro'
 import { getAllPosts } from '~/helpers/queries'
+import { slugify } from '~/helpers/utils'
 
 export async function getStaticPaths() {
   const posts: CollectionEntry<'blog'>[] = await getAllPosts()
@@ -73,14 +74,15 @@ const hasTags = !!post.data.tags
           <div>
             <h3 class="font-bold text-xl">Tags</h3>
             <div class="pl-1 flex flex-wrap">
-              {post.data.tags.map((tag: string) => (
-                <a
-                  class="after:content-[','] after:dark:text-stone-300 after:text-stone-500 after:last:content-[''] text-orange-600 pr-1 after:ml-[-0.55em]"
-                  href={`/blog/tag/${tag}`}
-                >
-                  #{tag}
-                </a>
-              ))}
+              {post.data.tags &&
+                post.data.tags.map((tag: string) => (
+                  <a
+                    class="after:content-[','] after:dark:text-stone-300 after:text-stone-500 after:last:content-[''] text-orange-600 pr-1 after:ml-[-0.55em]"
+                    href={`/blog/tag/${slugify(tag)}`}
+                  >
+                    #{tag}
+                  </a>
+                ))}
             </div>
           </div>
         )

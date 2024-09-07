@@ -37,7 +37,7 @@ const hasTags = !!post.data.tags
         <h3>
           <a
             class="underline decoration-orange-600 decoration-2"
-            href={`/blog/category/${post.data.category}`}
+            href={`/blog/categories/${post.data.category}`}
           >
             /{post.data.category}
           </a>
@@ -78,7 +78,7 @@ const hasTags = !!post.data.tags
                 post.data.tags.map((tag: string) => (
                   <a
                     class="after:content-[','] after:dark:text-stone-300 after:text-stone-500 after:last:content-[''] text-orange-600 pr-1 after:ml-[-0.55em]"
-                    href={`/blog/tag/${slugify(tag)}`}
+                    href={`/blog/tags/${slugify(tag)}`}
                   >
                     #{tag}
                   </a>

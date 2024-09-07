@@ -1,0 +1,31 @@
+---
+import Paginate from '@components/Paginate.astro'
+import PostList from '@components/PostList.astro'
+import BaseLayout from '@layouts/BaseLayout.astro'
+import type { Page, PaginateFunction } from 'astro'
+
+import { getAllPosts } from '~/helpers/queries.js'
+
+export async function getStaticPaths({
+  paginate,
+}: {
+  paginate: PaginateFunction
+}) {
+  const posts = await getAllPosts()
+
+  return paginate(posts, { pageSize: 8 })
+}
+
+interface Props {
+  page: Page
+}
+
+const { page } = Astro.props
+---
+
+<BaseLayout>
+  <div class="grow flex flex-col">
+    <PostList posts={page.data} />
+    <Paginate {page} />
+  </div>
+</BaseLayout>

@@ -5,8 +5,14 @@ import PostList from '@components/PostList.astro'
 import type { CollectionEntry } from 'astro:content'
 import { getAllPosts } from '~/helpers/queries.js'
 import { pluralize, slugify } from '~/helpers/utils.js'
+import type { PaginateFunction } from 'astro'
+import Paginate from '@components/Paginate.astro'
 
-export async function getStaticPaths() {
+export async function getStaticPaths({
+  paginate,
+}: {
+  paginate: PaginateFunction
+}) {
   const posts: CollectionEntry<'blog'>[] = await getAllPosts()
   const tagListings = new Map()
 
@@ -22,22 +28,23 @@ export async function getStaticPaths() {
       })
   })
 
-  return Array.from(tagListings.entries()).map((tagListing) => ({
-    params: { slug: tagListing[0] },
-    props: {
-      tag: tagListing[0],
-      posts: tagListing[1],
-    },
-  }))
+  return Array.from(tagListings.entries()).flatMap((tagListing) =>
+    paginate(tagListing[1], {
+      params: { tag: tagListing[0] },
+      pageSize: 8,
+    }),
+  )
 }
 
-const { tag, posts } = Astro.props
+const { page } = Astro.props
+const { tag } = Astro.params
 ---
 
 <BaseLayout>
   <h1 class="text-2xl font-bold pb-5"
-    >tag/{tag} ({posts.length} {pluralize('post', posts.length)})</h1
+    >tags/{tag} ({page.total} {pluralize('post', page.total)})</h1
   >
   <hr class="border-stone-400 border-t-2 pb-5" />
-  <PostList {posts} />
+  <PostList posts={page.data} />
+  <Paginate {page} />
 </BaseLayout>

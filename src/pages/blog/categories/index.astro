@@ -26,7 +26,7 @@ const categories: string[][] = Array.from(catMap).sort((a, b) => {
     {
       categories.map((category) => (
         <a
-          class="text-orange-600 underline"
+          class="text-orange-600 hover:text-stone-800 hover:bg-orange-600 underline"
           href={`/blog/categories/${category[0]}`}
         >
           #{category[1]}

@@ -25,13 +25,15 @@ const { posts, baseUrl = '/blog' } = Astro.props
         <FormattedDate date={post.data.published_on} />
         <div class:list={{ hidden: !post.data.category }}>
           <a
-            class="text-sm text-stone-500 dark:text-stone-400 underline decoration-1 font-bold"
+            class="text-sm text-stone-500 dark:text-stone-400 underline decoration-1 decoration-orange-700 hover:bg-orange-600 hover:text-stone-800 hover:no-underline font-bold"
             href={`${baseUrl}/categories/${post.data.category}`}
           >
             /{post.data.category}
           </a>
         </div>
-        <p class="text-stone-500">{post.data.description}</p>
+        <p class="dark:text-stone-300 text-stone-600">
+          {post.data.description}
+        </p>
       </li>
     ))
   }

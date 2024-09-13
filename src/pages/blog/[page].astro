@@ -13,7 +13,7 @@ export async function getStaticPaths({
 }) {
   const posts = await getAllPosts()
 
-  return paginate(posts, { pageSize: 8 })
+  return paginate(posts, { pageSize: 10 })
 }
 
 interface Props {

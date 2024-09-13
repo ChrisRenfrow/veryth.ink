@@ -30,72 +30,68 @@ const hasTags = !!post.data.tags
 ---
 
 <BaseLayout>
-  <div class="flex flex-col pb-5 space-y-2">
-    <h1 class="text-4xl font-bold">{post.data.title}</h1>
-    {
-      hasCategory && (
-        <h3>
-          <a
-            class="underline decoration-orange-600 hover:bg-orange-600 hover:text-stone-800 decoration-2"
-            href={`/blog/categories/${post.data.category}`}
-          >
-            /{post.data.category}
-          </a>
-        </h3>
-      )
-    }
-    <span
-      >posted on <FormattedDate date={post.data.published_on} />, by {
-        post.data.author
-      }</span
-    >
-    <p class="text-lg text-stone-600 dark:text-stone-400">
-      {post.data.description}
-    </p>
+  <article class="pb-6">
+    <header class="flex flex-col space-y-2 pb-2">
+      <h1 class="text-4xl font-bold lowercase">{post.data.title}</h1>
+      <div class="flex flex-row gap-4 md:flex-col">
+        <time class="font-bold"
+          ><FormattedDate date={post.data.published_on} /></time
+        >
+        {
+          hasCategory && (
+            <span>
+              <a
+                class="text-stone-500 underline decoration-stone-400 hover:bg-stone-600 hover:text-stone-200 hover:no-underline"
+                href={`/blog/categories/${post.data.category}`}
+              >
+                /{post.data.category}
+              </a>
+            </span>
+          )
+        }
+      </div>
+      <p class="text-lg text-stone-600 dark:text-stone-400">
+        {post.data.description}
+      </p>
+      <div class="ml-auto mt-auto lowercase">by {post.data.author}</div>
+    </header>
     <hr class="border-orange-700" />
-  </div>
-  <div class="flex flex-col md:flex-row">
-    <div
-      class:list={[
-        'basis-1/4 pr-5 flex md:space-y-5 md:flex-col',
-        headings.length == 0 && !post.data.tags && 'hidden',
-      ]}
+  </article>
+  <main>
+    <aside
+      class:list={['hidden', 'md:block', headings.length == 0 && 'hidden']}
     >
       {
         hasHeadings && (
-          <div>
-            <h3 class="font-bold text-xl">Contents</h3>
+          <nav class="float-right min-w-56 pb-4 pl-8">
+            <h3 class="font-bold">contents</h3>
+            <hr class="border-stone-400 pb-4" />
             <Toc headings={shallowHeadings} />
-          </div>
+          </nav>
         )
       }
-      {
-        hasTags && (
-          <div>
-            <h3 class="font-bold text-xl">Tags</h3>
-            <div class="pl-1 flex flex-wrap">
-              {post.data.tags &&
-                post.data.tags.map((tag: string) => (
-                  <a
-                    class="after:content-[','] after:dark:text-stone-300 after:text-stone-500 after:last:content-[''] text-orange-700 hover:text-stone-800 hover:bg-orange-600 pr-1 after:ml-[-0.55em]"
-                    href={`/blog/tags/${slugify(tag)}`}
-                  >
-                    #{tag}
-                  </a>
-                ))}
-            </div>
-          </div>
-        )
-      }
-    </div>
-    <div
-      class="basis-3/4 pt-4 md:pt-0
-        prose-sm md:prose prose-stone dark:prose-invert
-        prose-h1:font-bold prose-h1:text-2xl light:prose-h1:text-stone-200
-        prose-a:decoration-orange-600 prose-a:decoration-2 hover:prose-a:text-stone-800 hover:prose-a:bg-orange-600 marker:prose-ul:text-stone-600 prose-blockquote:border-stone-600
-        prose-p:text-justify prose-headings:underline"
+    </aside>
+    <section
+      class="light:prose-h1:text-stone-200 prose prose-stone !max-w-none dark:prose-invert prose-headings:font-bold prose-headings:lowercase prose-headings:underline prose-h1:text-2xl prose-p:text-justify prose-a:decoration-orange-600 prose-a:decoration-2 hover:prose-a:bg-orange-600 hover:prose-a:text-stone-800 prose-blockquote:border-stone-600 marker:prose-ul:text-stone-600"
     >
       <Content />
-    </div>
-  </div>
+    </section>
+  </main>
+  {
+    hasTags && (
+      <footer class="pt-5">
+        <nav class="inline-flex flex-wrap gap-1">
+          {post.data.tags &&
+            post.data.tags.map((tag: string) => {
+              const slugTag = slugify(tag)
+              // prettier-ignore
+              return (
+                <span class="after:content-[','] last:after:content-none">
+                <a class="text-orange-600 hover:bg-orange-600 hover:text-stone-800" href={`/blog/tags/${slugTag}`}>#{slugTag}</a></span>
+              )
+            })}
+        </nav>
+      </footer>
+    )
+  }
 </BaseLayout>

@@ -29,8 +29,12 @@ export default defineConfig({
     ],
   },
   redirects: {
+    // Redirect the root path for anything paginated to the first page for each
     '/blog': '/blog/1',
     '/blog/categories/[category]': '/blog/categories/[category]/1',
     '/blog/tags/[tag]': '/blog/tags/[tag]/1',
+    // Make old links compatible with new layout
+    '/categories/[category]': '/blog/categories/[category]',
+    '/tags/[tag]': '/blog/tags/[tag]',
   },
 })

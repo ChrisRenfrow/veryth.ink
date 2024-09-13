@@ -9,7 +9,17 @@ export default defineConfig({
     tailwind(),
     expressiveCode({
       themes: ['solarized-light', 'vitesse-dark'],
-      styleOverrides: { uiFontFamily: 'inherit' },
+      defaultProps: { showLineNumbers: false },
+      styleOverrides: {
+        uiFontFamily: 'inherit',
+        frames: {
+          frameBoxShadowCssValue: 'none',
+          editorTabBarBackground: ({ theme }) =>
+            theme.colors['tab.activeBackground'],
+          editorActiveTabIndicatorTopColor: 'transparent',
+        },
+        editorActiveTabBackground: 'transparent',
+      },
       plugins: [pluginLineNumbers()],
     }),
   ],

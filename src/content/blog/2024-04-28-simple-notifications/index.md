@@ -23,7 +23,7 @@ Before I begin detailing how I went about solving this, I want to make it clear 
 
 ## ntfy
 
-I remembered having heard of a simple, self-hostable, open-source service called [*ntfy*](https://ntfy.sh) that seemed to be a good match for what I was looking for. 
+I remembered having heard of a simple, self-hostable, open-source service called [*ntfy*](https://ntfy.sh) that seemed to be a good match for what I was looking for.
 
 *ntfy* (pronounced "notify") is a very simple, but flexible service that allows users to generate a **topic**, subscribe other devices with a *ntfy* client to that **topic**, and send `POST` or `PUT` requests to that **topic** to create a new notification! Here's an example:
 
@@ -37,7 +37,7 @@ Any client that had subscribed to `test-topic-plz-ignore` at the time of sending
 
 So, to test that this worked for me, I quickly wrote the following bash script.
 
-```sh
+```sh showLineNumbers {9-11}
 #!/usr/bin/env bash
 
 USER="[REDACTED]"
@@ -64,18 +64,12 @@ And after running this script on a mail file I had locally, I could verify it wo
 
 ## Some systemd
 
-When I was exploring the server's system earlier, I had noticed the presence of `systemd` so, in an effort to familiarize myself with the utility more, I decided to use it for my scheduling needs - although, a simple cronjob would certainly have sufficed. 
+When I was exploring the server's system earlier, I had noticed the presence of `systemd` so, in an effort to familiarize myself with the utility more, I decided to use it for my scheduling needs - although, a simple cronjob would certainly have sufficed.
 
 First, I defined the service file in my remote user's home directory.
 
-{% code_block(path="/home/bob/hello_world.txt") %}
-```sh
-rm -rf /
-```
-{% end %}
-
-`~/.config/systemd/user/check-mail.service`
-```ini
+```ini showLineNumbers
+# ~/.config/systemd/user/check-mail.service
 [Unit]
 Description=notify if there is new mail
 
@@ -86,8 +80,8 @@ ExecStart=%h/.local/bin/check-mail.sh
 
 Then, I defined a timer file which specifies a service to run at defined intervals.
 
-`~/.config/systemd/user/check-mail.timer`
-```ini
+```ini showLineNumbers
+# ~/.config/systemd/user/check-mail.timer
 [Unit]
 Description=timer for check-mail.service
 
@@ -106,7 +100,7 @@ I then reloaded the systemd user daemon with `systemd --user daemon-reload`, and
 
 ## Improvements
 
-I'm currently satisfied with the above, but of course, I've already identified several ways this could be improved. 
+I'm currently satisfied with the above, but of course, I've already identified several ways this could be improved.
 
 It would be preferred to only trigger a notification when there are new and previously un-notified messages that remain unread. Right now, this script will spam me with notifications every 15-minutes until I handle them all - not ideal. I could probably fix this easily by hashing the mail file and storing the value between runs, comparing hashes on the next run and triggering a new notification if they don't match. This also comes with the benefit of being able to tighten-up the interval a bit to get more immediate notifications, if I preferred.
 
@@ -116,7 +110,7 @@ Additionally, before releasing, I'd want to do research into how other mail syst
 
 # Conclusion
 
-Thanks for reading this short post! 
+Thanks for reading this short post!
 
 I want to take a moment to give a quick shout-out to [Philipp C. Heckel](https://blog.heckel.io/about/), the creator of [ntfy.sh](https://ntfy.sh), for publishing and maintaining his easy-to-use, well-documented, and open-source software! This would have taken much more effort to solve without his work being available to use freely. This post was not sponsored by him in any way, I'm just grateful for his efforts. :)
 

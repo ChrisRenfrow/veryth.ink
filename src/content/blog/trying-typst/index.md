@@ -2,7 +2,7 @@
 title: "Trying out Typst"
 description: Sharing some of my thoughts on this new-school typsetting system as I begin to use it
 published_on: 2024-07-02
-category: first-impressions
+category: impressions
 tags: [ "typst", "typsetting", "blaggregate" ]
 ---
 
@@ -18,7 +18,7 @@ I began using LaTeX initially to create my resume through [Overleaf](https://www
 
 My trajectory with LaTeX looked something like this:
 
-LaTeX is great -> LaTeX is a pain -> Do I even know how to write LaTeX actually? 
+LaTeX is great -> LaTeX is a pain -> Do I even know how to write LaTeX actually?
 
 Soon enough I found myself needing to generate a variety of documents, contracts, invoices, reports, proposals, etc. After fiddling with Org to LaTeX exports for a bit I decided it was time to try something new. I had remembered hearing about this thing called Typst which piqued my interest not long ago and thought to give it a go.
 

@@ -24,7 +24,7 @@ const { page } = Astro.props
 ---
 
 <BaseLayout>
-  <div class="grow flex flex-col">
+  <div class="flex grow flex-col">
     <PostList posts={page.data} />
     <Paginate {page} />
   </div>

@@ -6,6 +6,8 @@ const dateObj = typeof date === 'string' ? new Date(date) : date
 const monthPadded = String(dateObj.getMonth() + 1).padStart(2, '0')
 const dayPadded = String(dateObj.getDate() + 1).padStart(2, '0')
 const formattedDate = `${dateObj.getFullYear()}-${monthPadded}-${dayPadded}`
+
+const { ...attrs } = Astro.props
 ---
 
-<span>{formattedDate}</span>
+<span {...attrs}>{formattedDate}</span>

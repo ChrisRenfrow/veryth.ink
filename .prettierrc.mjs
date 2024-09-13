@@ -1,18 +1,22 @@
 // .prettierrc.mjs
 /** @type {import("prettier").Config} */
 export default {
-  htmlWhitespaceSensitivity: "strict",
+  htmlWhitespaceSensitivity: 'strict',
   tabWidth: 2,
-  trailingComma: "all",
+  trailingComma: 'all',
   singleQuote: true,
   semi: false,
-  plugins: ["prettier-plugin-astro"],
+  plugins: [
+    'prettier-plugin-astro',
+    'prettier-plugin-organize-attributes',
+    'prettier-plugin-tailwindcss',
+  ],
   overrides: [
     {
-      files: "*.astro",
+      files: '*.astro',
       options: {
-        parser: "astro",
+        parser: 'astro',
       },
     },
   ],
-};
+}

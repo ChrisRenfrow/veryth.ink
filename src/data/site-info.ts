@@ -29,7 +29,7 @@ export type SiteInfo = {
 const siteInfo: SiteInfo = {
   name: 'veryth.ink',
   title: 'hello, world.',
-  description: 'home to my thoughts',
+  description: '$HOME to my thoughts',
   author: 'Chris Renfrow',
   taxonomies: [
     {

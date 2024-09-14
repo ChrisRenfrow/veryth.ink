@@ -46,10 +46,10 @@ const siteInfo: SiteInfo = {
       name: '/now',
       url: '/now',
     },
-    // {
-    //     name: "/projects",
-    //     url: "/projects"
-    // },
+    {
+      name: '/projects',
+      url: '/projects',
+    },
     {
       name: '/blog',
       url: '/blog',

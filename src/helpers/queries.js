@@ -16,3 +16,16 @@ export async function getAllPosts(
     )
   return posts
 }
+
+export async function getAllProjects(
+  options = {
+    chronSort: true,
+  },
+) {
+  let projects = await getCollection('projects')
+  if (options.chronSort)
+    projects.sort(
+      (a, b) => b.data.dateStarted.valueOf() - a.data.dateStarted.valueOf(),
+    )
+  return projects
+}

@@ -1,0 +1,49 @@
+---
+import Paginate from '@components/Paginate.astro'
+import BaseLayout from '@layouts/BaseLayout.astro'
+import type { Page, PaginateFunction } from 'astro'
+import { getAllProjects } from '~/helpers/queries.js'
+
+export async function getStaticPaths({
+  paginate,
+}: {
+  paginate: PaginateFunction
+}) {
+  const projects = await getAllProjects()
+
+  return paginate(projects, { pageSize: 8 })
+}
+
+interface Props {
+  page: Page
+}
+
+const { page } = Astro.props
+---
+
+<BaseLayout>
+  <div class="flex grow flex-col">
+    <ul class="flex flex-col gap-4">
+      {
+        page.data.map((project) => (
+          <li class="flex min-h-16 flex-row gap-2">
+            <div class="flex flex-col">
+              <h3 class="text-lg lowercase underline decoration-orange-600 decoration-1">
+                <a
+                  class="hover:bg-orange-600 hover:text-stone-800"
+                  href={`/projects/${project.slug}`}
+                >
+                  {project.data.name}
+                </a>
+              </h3>
+              <p class="line-clamp-2 text-ellipsis text-stone-400">
+                {project.data.description}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+    <Paginate {page} />
+  </div>
+</BaseLayout>

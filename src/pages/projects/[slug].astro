@@ -43,7 +43,7 @@ const {
 ---
 
 <BaseLayout>
-  <article class="pb-6">
+  <article class="pb-5">
     <header class="flex flex-col space-y-2 pb-2">
       <h1 class="text-4xl font-bold lowercase">{name}</h1>
       <p class="text-lg text-stone-600 dark:text-stone-400">{description}</p>
@@ -51,16 +51,8 @@ const {
     <hr class="border-orange-700" />
   </article>
   <main>
-    <section
-      class="prose prose-stone !max-w-none dark:prose-invert prose-headings:font-bold prose-headings:lowercase prose-headings:underline prose-h2:text-2xl prose-p:text-justify"
-    >
-      <h2>About</h2>
-      <p><Content /></p>
-    </section>
-
-    <section class="mt-6">
-      <h2 class="text-2xl font-bold lowercase underline">Details</h2>
-      <ul class="mt-2 space-y-1">
+    <section class="mb-5">
+      <ul class="space-y-1">
         <li><span class="font-bold">Status:</span> {status}</li>
         <li
           ><span class="font-bold">Started:</span>
@@ -123,6 +115,12 @@ const {
         </section>
       )
     }
+    <section
+      class="prose prose-stone !max-w-none dark:prose-invert prose-headings:font-bold prose-headings:lowercase prose-headings:underline prose-h2:text-2xl prose-p:text-justify"
+    >
+      <h2>About</h2>
+      <p><Content /></p>
+    </section>
 
     {
       posts && posts.length > 0 && (

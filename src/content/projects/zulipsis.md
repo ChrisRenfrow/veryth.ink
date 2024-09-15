@@ -1,17 +1,17 @@
 ---
 name: 'zulipsis'
 description: 'A fun tool for automatically cycling your Zulip status. Built with Rust.'
-homepage: null
+homepage: 'https://github.com/chrisrenfrow/zulipsis'
 repository: 'https://github.com/chrisrenfrow/zulipsis'
-dateStarted: 2023-10-10
-dateFinished: 2023-11-09
-status: 'unreleased'
-relationalTags: ['zulipsis']
+started_on: 2023-10-10
+finished_on: 2023-11-09
+status: 'on-hold'
+associated_tags: ['zulipsis']
 contributors:
   - name: Erika Rowland
-    github: erikareads
+    profile_url: https://github.com/erikareads
   - name: stcucufa
-    github: stcucufa
+    profile_url: https://github.com/stcucufa
 ---
 
 This project came from an idea to make a service one could run while they were working to cycle through fun/silly Zulip status messages and emoji, then, when stopped, automatically set an "away" status.

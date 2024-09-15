@@ -2,14 +2,14 @@
 import Paginate from '@components/Paginate.astro'
 import BaseLayout from '@layouts/BaseLayout.astro'
 import type { Page, PaginateFunction } from 'astro'
-import { getAllProjects } from '~/helpers/queries.js'
+import { getProjects } from '~/helpers/queries'
 
 export async function getStaticPaths({
   paginate,
 }: {
   paginate: PaginateFunction
 }) {
-  const projects = await getAllProjects()
+  const projects = await getProjects()
 
   return paginate(projects, { pageSize: 8 })
 }

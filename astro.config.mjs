@@ -3,13 +3,18 @@ import tailwind from '@astrojs/tailwind'
 import expressiveCode from 'astro-expressive-code'
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 
+import pageInsight from 'astro-page-insight'
+
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://veryth.ink',
   integrations: [
     tailwind(),
     expressiveCode({
       themes: ['solarized-light', 'vitesse-dark'],
-      defaultProps: { showLineNumbers: false },
+      defaultProps: {
+        showLineNumbers: false,
+      },
       styleOverrides: {
         uiFontFamily: 'inherit',
         frames: {
@@ -22,6 +27,7 @@ export default defineConfig({
       },
       plugins: [pluginLineNumbers()],
     }),
+    pageInsight(),
   ],
   markdown: {
     remarkPlugins: [

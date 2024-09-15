@@ -1,39 +1,29 @@
 ---
+import type { CollectionEntry } from 'astro:content'
+import type { PaginateFunction } from 'astro'
+
 import BaseLayout from '@layouts/BaseLayout.astro'
 import PostList from '@components/PostList.astro'
-
-import type { CollectionEntry } from 'astro:content'
-import { getAllPosts } from '~/helpers/queries.js'
-import { pluralize, slugify } from '~/helpers/utils.js'
-import type { PaginateFunction } from 'astro'
 import Paginate from '@components/Paginate.astro'
+
+import { getPosts, getTags } from '~/helpers/queries.js'
+import { pluralize } from '~/helpers/utils.js'
 
 export async function getStaticPaths({
   paginate,
 }: {
   paginate: PaginateFunction
 }) {
-  const posts: CollectionEntry<'blog'>[] = await getAllPosts()
-  const tagListings = new Map()
+  const posts: CollectionEntry<'blog'>[] = await getPosts()
+  const tags = await getTags()
 
-  posts.forEach((post) => {
-    post.data.tags &&
-      post.data.tags.forEach((tag: string) => {
-        const tagSlug = slugify(tag)
-        if (tagListings.has(tagSlug)) {
-          tagListings.get(tagSlug).push(post)
-        } else {
-          tagListings.set(tagSlug, [post])
-        }
-      })
-  })
-
-  return Array.from(tagListings.entries()).flatMap((tagListing) =>
-    paginate(tagListing[1], {
-      params: { tag: tagListing[0] },
+  return tags.flatMap(([tagSlug, tag]) => {
+    const tagPosts = posts.filter(post => post.data.tags?.includes(tag))
+    return paginate(tagPosts, {
+      params: { tag: tagSlug },
       pageSize: 8,
-    }),
-  )
+    })
+  })
 }
 
 const { page } = Astro.props

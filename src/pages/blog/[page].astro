@@ -4,14 +4,14 @@ import PostList from '@components/PostList.astro'
 import BaseLayout from '@layouts/BaseLayout.astro'
 import type { Page, PaginateFunction } from 'astro'
 
-import { getAllPosts } from '~/helpers/queries.js'
+import { getPosts } from '~/helpers/queries.js'
 
 export async function getStaticPaths({
   paginate,
 }: {
   paginate: PaginateFunction
 }) {
-  const posts = await getAllPosts()
+  const posts = await getPosts()
 
   return paginate(posts, { pageSize: 10 })
 }

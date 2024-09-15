@@ -4,11 +4,11 @@ import { type CollectionEntry } from 'astro:content'
 import FormattedDate from '@components/FormattedDate.astro'
 import Toc from '@components/Toc.astro'
 import BaseLayout from '@layouts/BaseLayout.astro'
-import { getAllPosts } from '~/helpers/queries'
+import { getPosts } from '~/helpers/queries'
 import { slugify } from '~/helpers/utils'
 
 export async function getStaticPaths() {
-  const posts: CollectionEntry<'blog'>[] = await getAllPosts()
+  const posts: CollectionEntry<'blog'>[] = await getPosts()
 
   return posts.map((post) => ({
     params: { slug: post.slug },

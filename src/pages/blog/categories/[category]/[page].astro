@@ -3,8 +3,8 @@ import BaseLayout from '@layouts/BaseLayout.astro'
 import PostList from '@components/PostList.astro'
 
 import { type CollectionEntry } from 'astro:content'
-import { getAllPosts } from '~/helpers/queries.js'
-import { pluralize, slugify } from '~/helpers/utils.js'
+import { getPosts, getCategories } from '~/helpers/queries.js'
+import { pluralize } from '~/helpers/utils.js'
 import type { PaginateFunction } from 'astro'
 import Paginate from '@components/Paginate.astro'
 
@@ -13,27 +13,20 @@ export async function getStaticPaths({
 }: {
   paginate: PaginateFunction
 }) {
-  const posts: CollectionEntry<'blog'>[] = await getAllPosts()
-  const categoryListings = new Map()
+  const posts: CollectionEntry<'blog'>[] = await getPosts()
+  const categories: string[][] = await getCategories()
 
-  posts.forEach((post) => {
-    const catSlug = post.data.category
-      ? slugify(post.data.category)
-      : 'uncategorized'
-    catSlug === 'uncategorized' && console.log(post.slug, 'is uncategorized')
-    if (categoryListings.has(catSlug)) {
-      categoryListings.get(catSlug).push(post)
-    } else {
-      categoryListings.set(catSlug, [post])
-    }
-  })
-
-  return Array.from(categoryListings.entries()).flatMap((category) =>
-    paginate(category[1], {
-      params: { category: category[0] },
+  return categories.flatMap(([categorySlug, categoryName]) => {
+    const categoryPosts = posts.filter(
+      (post) =>
+        post.data.category === categoryName ||
+        (!post.data.category && categorySlug === 'uncategorized'),
+    )
+    return paginate(categoryPosts, {
+      params: { category: categorySlug },
       pageSize: 8,
-    }),
-  )
+    })
+  })
 }
 
 const { page } = Astro.props

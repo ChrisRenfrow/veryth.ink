@@ -32,15 +32,30 @@ export async function getPosts(options) {
     )
   return posts
 }
+
 export async function getTags() {
   const posts = await getPosts({ chronSort: false })
   const tagMap = new Map()
   posts.forEach((post) => {
-    post.data.tags?.forEach((tag) => {
-      tagMap.set(slugify(tag), tag)
-    })
+    const tags = post.data.tags
+    tags &&
+      tags.forEach((tag) => {
+        if (tagMap.has(slugify(tag))) {
+          tagMap.set(slugify(tag), [tag, tagMap.get(slugify(tag))[1] + 1])
+        } else {
+          tagMap.set(slugify(tag), [tag, 1])
+        }
+      })
   })
-  return Array.from(tagMap).sort((a, b) => a[0].localeCompare(b[0]))
+  return Array.from(tagMap)
+    .map(([slug, [tag, count]]) => [slug, tag, count])
+    .sort((a, b) => {
+      // Sort by count (descending) first, then alphabetically
+      if (b[2] !== a[2]) {
+        return b[2] - a[2]
+      }
+      return a[1].localeCompare(b[1])
+    })
 }
 
 export async function getCategories() {
@@ -48,9 +63,24 @@ export async function getCategories() {
   const categoryMap = new Map()
   posts.forEach((post) => {
     const category = post.data.category || 'uncategorized'
-    categoryMap.set(slugify(category), category)
+    if (categoryMap.has(slugify(category))) {
+      categoryMap.set(slugify(category), [
+        category,
+        categoryMap.get(slugify(category))[1] + 1,
+      ])
+    } else {
+      categoryMap.set(slugify(category), [category, 1])
+    }
   })
-  return Array.from(categoryMap).sort((a, b) => a[0].localeCompare(b[0]))
+  return Array.from(categoryMap)
+    .map(([slug, [category, count]]) => [slug, category, count])
+    .sort((a, b) => {
+      // Sort by count (descending) first, then alphabetically
+      if (b[2] !== a[2]) {
+        return b[2] - a[2]
+      }
+      return a[1].localeCompare(b[1])
+    })
 }
 
 export async function getProjects(options) {

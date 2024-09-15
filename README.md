@@ -1,3 +1,3 @@
 # TODO
-- [ ] Projects list/page
-- [ ] Per-tag/category RSS-feeds
+- [x] Projects list/page
+- [x] Per-tag/category RSS-feeds

@@ -4,3 +4,8 @@ export function slugify(str) {
 
 // Very basic pluralization.
 export const pluralize = (str, n) => (n > 1 ? str + 's' : str)
+
+export const isProduction = (env) =>
+  (env.NETLIFY && env.CONTEXT === 'production') ||
+  (env.VERCEL && env.PUBLIC_VERCEL_ENV === 'production') ||
+  env.PROD

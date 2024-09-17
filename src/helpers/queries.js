@@ -1,9 +1,7 @@
 import { getCollection } from 'astro:content'
-import { slugify } from './utils'
+import { slugify, isProduction } from './utils'
 
-const PROD = import.meta.env.NETLIFY
-  ? import.meta.env.CONTEXT == 'production'
-  : import.meta.env.PROD
+const PROD = isProduction(import.meta.env)
 
 export async function getPosts(options) {
   options = {

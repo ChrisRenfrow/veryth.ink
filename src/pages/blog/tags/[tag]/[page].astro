@@ -18,7 +18,7 @@ export async function getStaticPaths({
   const tags = await getTags()
 
   return tags.flatMap(([tagSlug, tag]) => {
-    const tagPosts = posts.filter(post => post.data.tags?.includes(tag))
+    const tagPosts = posts.filter((post) => post.data.tags?.includes(tag))
     return paginate(tagPosts, {
       params: { tag: tagSlug },
       pageSize: 8,
@@ -31,10 +31,15 @@ const { tag } = Astro.params
 ---
 
 <BaseLayout>
-  <h1 class="text-2xl font-bold pb-5"
-    >tags/{tag} ({page.total} {pluralize('post', page.total)})</h1
+  <h1 class="pb-5 text-2xl font-bold"
+    ><a
+      href="/blog/tags"
+      class="underline decoration-orange-600 decoration-2 hover:bg-orange-600"
+      >tags</a
+    >/{tag} ({page.total}
+    {pluralize('post', page.total)})</h1
   >
-  <hr class="border-stone-400 border-t-2 pb-5" />
+  <hr class="border-t-2 border-stone-400 pb-5" />
   <PostList posts={page.data} />
   <Paginate {page} />
 </BaseLayout>

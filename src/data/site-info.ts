@@ -31,16 +31,6 @@ const siteInfo: SiteInfo = {
   title: 'hello, world.',
   description: '$HOME to my thoughts',
   author: 'Chris Renfrow',
-  taxonomies: [
-    {
-      name: 'categories',
-      feed: true,
-    },
-    {
-      name: 'tags',
-      feed: true,
-    },
-  ],
   navigation: [
     {
       name: '/now',
@@ -54,14 +44,6 @@ const siteInfo: SiteInfo = {
       name: '/blog',
       url: '/blog',
     },
-    // {
-    //     name: "/categories",
-    //     url: "/categories"
-    // },
-    // {
-    //     name: "/tags",
-    //     url: "/tags"
-    // }
   ],
   socials: [
     {

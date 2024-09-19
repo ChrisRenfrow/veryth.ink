@@ -1,0 +1,30 @@
+---
+import Paginate from '@components/Paginate.astro'
+import BaseLayout from '@layouts/BaseLayout.astro'
+import ProjectList from './_components/ProjectList.astro'
+
+import { getProjects } from '~/helpers/queries.js'
+
+const projects = await getProjects()
+const total = projects.length
+const page = {
+  data: projects.slice(0, 8),
+  start: 0,
+  end: 8,
+  size: 8,
+  total: total,
+  currentPage: 1,
+  lastPage: Math.ceil(total / 8),
+  url: {
+    prev: null,
+    next: total > 8 ? '/projects/2' : null,
+  },
+}
+---
+
+<BaseLayout>
+  <div class="flex grow flex-col">
+    <ProjectList projects={page.data} />
+    <Paginate {page} />
+  </div>
+</BaseLayout>

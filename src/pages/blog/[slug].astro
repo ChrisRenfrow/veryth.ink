@@ -16,12 +16,11 @@ export async function getStaticPaths() {
   }))
 }
 
-interface Props {
-  post: CollectionEntry<'blog'>
-}
-
 const { post } = Astro.props
-const { Content, headings } = await post.render()
+const { Content, headings } = (await post.render()) as {
+  Content: any
+  headings: { depth: number; slug: string; text: string }[]
+}
 
 const shallowHeadings = headings.filter((h) => h.depth <= 2)
 const hasHeadings = headings.length > 0

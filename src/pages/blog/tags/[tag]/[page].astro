@@ -17,10 +17,10 @@ export async function getStaticPaths({
   const posts: CollectionEntry<'blog'>[] = await getPosts()
   const tags = await getTags()
 
-  return tags.flatMap(([tagSlug, tag]) => {
-    const tagPosts = posts.filter((post) => post.data.tags?.includes(tag))
+  return tags.flatMap(({ slug, label }) => {
+    const tagPosts = posts.filter((post) => post.data.tags?.includes(label))
     return paginate(tagPosts, {
-      params: { tag: tagSlug },
+      params: { tag: slug },
       pageSize: 8,
     })
   })

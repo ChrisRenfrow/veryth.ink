@@ -1,21 +1,19 @@
 ---
 import type { GetStaticPaths } from 'astro'
 import type { CollectionEntry } from 'astro:content'
-import type { ProjectSchema } from '~/content/config'
 
 import BaseLayout from '@layouts/BaseLayout.astro'
 import FormattedDate from '@components/FormattedDate.astro'
 import PostList from '@components/PostList.astro'
 
-import { slugify } from '~/helpers/utils'
 import { getProjects, getPosts } from '~/helpers/queries'
 
 export const getStaticPaths = (async () => {
-  const projects = await getProjects({ drafts: true })
-  const allPosts = await getPosts({ drafts: true })
+  const projects = await getProjects()
+  const allPosts = await getPosts()
 
-  return projects.map((project: CollectionEntry<'project'>) => {
-    const relatedPosts = allPosts.filter((post: CollectionEntry<'blog'>) =>
+  return projects.map((project) => {
+    const relatedPosts = allPosts.filter((post) =>
       project.data.associated_tags?.some((tag: string) =>
         post.data.tags?.includes(tag),
       ),
@@ -32,11 +30,11 @@ function truncateUrl(url: string): string {
 }
 
 interface Props {
-  project: CollectionEntry<'project'>
+  project: CollectionEntry<'projects'>
   posts: CollectionEntry<'blog'>[]
 }
 
-const { project, posts } = Astro.props as Props
+const { project, posts } = Astro.props
 const { Content } = await project.render()
 
 const {
@@ -49,7 +47,8 @@ const {
   finished_on,
   status,
   contributors,
-} = project.data as ProjectSchema
+  associated_tags,
+} = project.data
 ---
 
 <BaseLayout>
@@ -137,10 +136,10 @@ const {
               related posts
             </h2>
             <PostList posts={posts} />
-            {project.relationalTags && project.relationalTags.length > 0 && (
+            {associated_tags && associated_tags.length > 0 && (
               <div class="mt-4">
                 <a
-                  href={`/blog/tags/${project.relationalTags[0]}`}
+                  href={`/blog/tags/${associated_tags[0]}`}
                   class="inline-block rounded bg-orange-600 px-4 py-2 text-white hover:bg-orange-700"
                 >
                   more posts

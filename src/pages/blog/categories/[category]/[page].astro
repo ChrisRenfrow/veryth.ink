@@ -14,16 +14,16 @@ export async function getStaticPaths({
   paginate: PaginateFunction
 }) {
   const posts: CollectionEntry<'blog'>[] = await getPosts()
-  const categories: string[][] = await getCategories()
+  const categories = await getCategories()
 
-  return categories.flatMap(([categorySlug, categoryName]) => {
+  return categories.flatMap(({ slug, label }) => {
     const categoryPosts = posts.filter(
       (post) =>
-        post.data.category === categoryName ||
-        (!post.data.category && categorySlug === 'uncategorized'),
+        post.data.category === label ||
+        (!post.data.category && slug === 'uncategorized'),
     )
     return paginate(categoryPosts, {
-      params: { category: categorySlug },
+      params: { category: slug },
       pageSize: 8,
     })
   })

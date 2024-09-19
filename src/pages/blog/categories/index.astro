@@ -1,9 +1,8 @@
 ---
-import type { CollectionEntry } from 'astro:content'
 import BaseLayout from '@layouts/BaseLayout.astro'
 import { getCategories } from '~/helpers/queries'
 
-const categories: string[][] = await getCategories()
+const categories = await getCategories()
 ---
 
 <BaseLayout>
@@ -13,13 +12,13 @@ const categories: string[][] = await getCategories()
     class="mr-auto grid grid-flow-row gap-x-4 gap-y-2 text-xl sm:grid-cols-2 md:grid-cols-3"
   >
     {
-      categories.map((category) => (
+      categories.map(({ slug, label, postCount }) => (
         <span>
           <a
             class="underline decoration-orange-600 decoration-2 hover:bg-orange-600 hover:text-stone-800"
-            href={`/blog/categories/${category[0]}`}
+            href={`/blog/categories/${slug}`}
           >
-            #{category[1]} ({category[2]})
+            #{label} ({postCount})
           </a>
         </span>
       ))

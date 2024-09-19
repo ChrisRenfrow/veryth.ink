@@ -8,9 +8,9 @@ import { pluralize } from '~/helpers/utils'
 
 export async function getStaticPaths() {
   const categories = await getCategories()
-  return categories.map(([slug, category]) => ({
+  return categories.map(({ slug, label }) => ({
     params: { category: slug },
-    props: { category: [slug, category] },
+    props: { category: [slug, label] },
   }))
 }
 const { category } = Astro.props

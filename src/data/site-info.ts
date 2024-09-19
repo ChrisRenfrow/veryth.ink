@@ -1,8 +1,3 @@
-export type Taxonomy = {
-  name: string
-  feed: boolean
-}
-
 export type NavigationItem = {
   name: string
   url: string
@@ -21,7 +16,6 @@ export type SiteInfo = {
   title: string
   description: string
   author: string
-  taxonomies: Taxonomy[]
   navigation: NavigationItem[]
   socials: SocialLink[]
 }

@@ -18,7 +18,7 @@ const { posts, baseUrl = '/blog' } = Astro.props
           <FormattedDate class="pt-1" date={post.data.published_on} />
           {post.data.category && (
           <span>
-            <a class="underline decoration-orange-900 decoration-2 hover:bg-stone-600 hover:text-stone-200 hover:no-underline dark:text-stone-300" href=`/categories/${post.data.category}`>
+            <a class="underline decoration-orange-900 decoration-2 hover:bg-stone-600 hover:text-stone-200 hover:no-underline dark:text-stone-300" href=`/blog/categories/${post.data.category}`>
               /{post.data.category}
             </a>
           </span>

@@ -1,6 +1,15 @@
 import rss from '@astrojs/rss'
 import { getPosts, getTags } from '~/helpers/queries'
-import { name, author } from '~/data/site-info'
+import siteInfo from '~/data/site-info'
+
+const { author, name } = siteInfo
+
+export async function getStaticPaths() {
+  const tags = await getTags()
+  return tags.map(([slug, tag]) => ({
+    params: { tag: slug },
+  }))
+}
 
 export async function GET(context) {
   const posts = await getPosts({ tags: [context.params.tag] })
@@ -16,10 +25,4 @@ export async function GET(context) {
       author,
     })),
   })
-}
-export async function getStaticPaths() {
-  const tags = await getTags()
-  return tags.map(([slug, tag]) => ({
-    params: { tag: slug },
-  }))
 }

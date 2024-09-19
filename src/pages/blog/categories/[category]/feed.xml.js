@@ -1,6 +1,15 @@
 import rss from '@astrojs/rss'
 import { getPosts, getCategories } from '~/helpers/queries'
-import { name, author } from '~/data/site-info'
+import siteInfo from '~/data/site-info'
+
+const { name, author } = siteInfo
+
+export async function getStaticPaths() {
+  const categories = await getCategories()
+  return categories.map(([slug, category]) => ({
+    params: { category: slug },
+  }))
+}
 
 export async function GET(context) {
   const posts = await getPosts({ category: context.params.category })
@@ -16,11 +25,4 @@ export async function GET(context) {
       author,
     })),
   })
-}
-
-export async function getStaticPaths() {
-  const categories = await getCategories()
-  return categories.map(([slug, category]) => ({
-    params: { category: slug },
-  }))
 }

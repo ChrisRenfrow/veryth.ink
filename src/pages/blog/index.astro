@@ -2,25 +2,25 @@
 import Paginate from '@components/Paginate.astro'
 import PostList from '@components/PostList.astro'
 import BaseLayout from '@layouts/BaseLayout.astro'
-import type { Page, PaginateFunction } from 'astro'
+import type { Page } from 'astro'
 
 import { getPosts } from '~/helpers/queries.js'
 
-export async function getStaticPaths({
-  paginate,
-}: {
-  paginate: PaginateFunction
-}) {
-  const posts = await getPosts()
-
-  return paginate(posts, { pageSize: 8 })
+const posts = await getPosts()
+const total = posts.length
+const page = {
+  data: posts.slice(0, 8),
+  start: 0,
+  end: 8,
+  size: 8,
+  total: total,
+  currentPage: 1,
+  lastPage: Math.ceil(total / 8),
+  url: {
+    prev: null,
+    next: total > 8 ? '/blog/2' : null,
+  },
 }
-
-interface Props {
-  page: Page
-}
-
-const { page } = Astro.props
 ---
 
 <BaseLayout>

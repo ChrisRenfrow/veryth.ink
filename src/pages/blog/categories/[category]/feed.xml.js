@@ -6,7 +6,7 @@ const { name, author } = siteInfo
 
 export async function getStaticPaths() {
   const categories = await getCategories()
-  return categories.map(([slug, _]) => ({
+  return categories.map(({ slug }) => ({
     params: { category: slug },
   }))
 }

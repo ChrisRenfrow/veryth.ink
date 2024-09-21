@@ -1,0 +1,20 @@
+---
+interface Props {
+  hash: string
+  sourceRepo: string
+}
+
+const { hash, sourceRepo } = Astro.props
+const shortHash = hash.slice(0, 7)
+---
+
+<a
+  href={`${sourceRepo}/commit/${hash}`}
+  class="not-prose inline-flex items-center rounded-sm bg-orange-600 bg-opacity-75 px-1 py-0.5 text-sm font-medium hover:bg-orange-400 hover:text-stone-800"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <span class="mr-1">[</span>
+  <span>{shortHash}</span>
+  <span class="ml-1">]</span>
+</a>

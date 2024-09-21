@@ -1,0 +1,68 @@
+---
+title: "Hello, world with MDX"
+description: "Trying things out"
+published_on: 2024-09-20
+draft: true
+
+category: test
+# [taxonomies]
+# tags: [ "hello" ]
+---
+import Blockquote from '@components/Blockquote.astro'
+export const components = { blockquote: Blockquote }
+
+# Content
+
+Now, for more _`C O N T E N T`_
+
+Sustulisti. Quid ei reliquisti, nisi te, quoquo modo loqueretur, intellegere, quid diceret? Aliena dixit in physicis nec ea ipsa, quae laudatur, industria, ne fortitudo.
+
+<Blockquote author="Marcus Tullius Cicero" source="De Finibus Bonorum et Malorum" sourceUrl="http://example.com">
+  Ne id ipsum quidem expedire possunt, quod disserunt. Praeterea sublata cognitione et scientia tollitur omnis ratio et vitae degendae et rerum gerendarum. Sic e.
+</Blockquote>
+
+<Blockquote centered source="De Finibus Bonorum et Malorum" sourceUrl="http://example.com">
+  Ne id ipsum quidem expedire possunt, quod disserunt. Praeterea sublata cognitione et scientia tollitur omnis ratio et vitae degendae et rerum gerendarum. Sic e.
+</Blockquote>
+
+<Blockquote right source="De Finibus Bonorum et Malorum">
+  Ne id ipsum quidem expedire possunt, quod disserunt. Praeterea sublata cognitione et scientia tollitur omnis ratio et vitae degendae et rerum gerendarum. Sic e.
+</Blockquote>
+
+<Blockquote>
+  Ne id ipsum quidem expedire possunt, quod disserunt. Praeterea sublata cognitione et scientia tollitur omnis ratio et vitae degendae et rerum gerendarum. Sic e.
+</Blockquote>
+
+
+---
+
+# Tables Are Cool
+
+|Foo Col|Bar Col|Baz Col|
+|-|-|-|
+|Foo|Foo|Foo|
+|Foo|Bar|Baz|
+
+---
+# Syntax Highlighting
+
+## Bash
+```sh
+function say_hello {
+    echo "Hello, $1"
+}
+```
+
+## JavaScript
+```js
+function say_hello(name) {
+    console.log(`Hello, ${name}`);
+}
+```
+
+## Rust
+```rust
+fn say_hello(name: &str) {
+    println!("Hello, {}", name);
+}
+```

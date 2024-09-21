@@ -1,0 +1,58 @@
+---
+title: "Tera shortcodes to MDX components"
+description: "A document for previewing Tera shortcodes and their MDX component equivalents"
+published_on: 2024-09-20
+draft: true
+---
+
+import fs from 'node:fs';
+import path from 'node:path';
+
+import { Code } from 'astro-expressive-code/components'
+
+import GitCommit from '@components/GitCommit.astro'
+import EmbedImage from '@components/EmbedImage.astro'
+
+export const embedImageSourceCode = fs.readFileSync(
+  path.join(process.cwd(), 'src', 'components', 'EmbedImage.astro'),
+  'utf-8'
+);
+
+export const gitCommitSourceCode = fs.readFileSync(
+  path.join(process.cwd(), 'src', 'components', 'GitCommit.astro'),
+  'utf-8'
+);
+
+Image-embedding short-code for adding alt text (and using it for the tooltip/hover text) and an optional caption.
+
+```html title="embed_image.md"
+<img src="{{ path }}" alt="{{ alt }}" title="{{ alt }}" />
+{% if caption %}
+> {{ caption }}
+{% endif %}
+```
+
+Given a git commit hash, and a source repository base-url, generate a link to the commit (only designed with Gitlab and GitHub in mind)
+
+```html title="git_commit.md"
+[[{{ hash }}]]({{ page.extra.source_repo }}/-/commit/{{ hash }})
+```
+
+Astro version of `embed_image.md`, with some enhancements.
+
+<Code code={embedImageSourceCode} lang='astro' />
+
+**demo:**
+<EmbedImage
+  src={import("./test-image.jpeg")}
+  alt="a very cute kitty peaking out between two monitors on a desk"
+  caption="She knows she's cute"
+  width="1/2"
+  />
+
+Astro version of `git_commit.astro`, with some enhancements.
+
+<Code code={gitCommitSourceCode} lang='astro' />
+
+**demo:**
+<GitCommit hash="2beb7856618b7a5c777d03b6d618b28040ad8d7f" sourceRepo="https://github.com/ChrisRenfrow/veryth.ink" />

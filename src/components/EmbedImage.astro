@@ -1,0 +1,41 @@
+---
+import { Picture } from 'astro:assets'
+
+interface Props {
+  src: ImageMetadata
+  alt: string
+  caption?: string
+  width?: '1/2' | '50%' | '2/3'
+}
+
+const { src, alt, caption, width, ...rest } = Astro.props
+---
+
+<figure class="not-prose my-4">
+  <div class="w-full rounded-md bg-stone-950/20">
+    <Picture
+      src={src}
+      alt={alt}
+      title={alt}
+      {...rest}
+      class:list={[
+        'mx-auto',
+        // This is necessary to work with Tailwind as it needs to see these
+        // *potential* styles in order to generate them.
+        // (could just use the style attribute but where's the fun in that?)
+        {
+          'w-1/2': width === '1/2' || width === '50%',
+          'w-2/3': width === '2/3',
+          'w-full rounded-md': !width,
+        },
+      ]}
+    />
+  </div>
+  {
+    caption && (
+      <figcaption class="mt-2 text-center text-sm italic text-stone-400">
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>

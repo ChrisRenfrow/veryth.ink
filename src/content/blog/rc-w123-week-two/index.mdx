@@ -6,9 +6,11 @@ category: check-in
 tags: [ "recurse_center", "blaggregate", "w1'23", "rust" ]
 ---
 
+import EmbedImage from '@components/EmbedImage.astro'
+
 Yes, this post is more than a bit late, for reasons I will explain in the next summary or perhaps as its own post. Suffice it to say I made a choice, which led to me not having access to a functional machine for nearly 5 days!
 
-**TLDR;** 
+**TLDR;**
 Had a stronger start to my week towards my batch goals. Did more pairing and coffee-chats than I did in week one and it felt like a good balance. I would have liked to have had even more to show for my second week, but over-all, I felt good where it ended.
 
 ---
@@ -50,11 +52,11 @@ In the background I was also working on printing out half of a keyboard case for
 
 I paired with a recurser on their Rust project, they wanted to implement some basic P2P netcode for their two-player game and I helped navigate as best as I could. Later I did some more work on the card deck "simulation". As I mentioned above, I realized that I initialized the cards in an order not [standard for USPCC playing cards](https://ambitiouswithcards.com/new-deck-order/) so I amended that, *very* important. I also printed the other side of my keyboard case.
 
-{{ embed_image(
-    path="keyboard-case.jpg",
+<EmbedImage
+    src={import("keyboard-case.jpg")}
     alt="Two halves of an ergonomic split keyboard case, 3D-printed using a shiny blue, purple, and red filament"
     caption="Both halves of the case. Total print time of about 4.5h. I really like this filament!"
-) }}
+/>
 
 # Day 8 (Wed, 8th)
 
@@ -63,16 +65,17 @@ Today I would have attended creative coding, but my ISP had other plans. So I wo
 ![sequence of photographs of a S.W.I.M. (linear array of computer-controlled lamps) being waved back-and-forth while imprinting content upon the naked eye](https://upload.wikimedia.org/wikipedia/commons/3/38/SittingWaveTwoCycles.gif)
 
 > sequence of photographs of a S.W.I.M. (linear array of computer-controlled lamps) being waved back-and-forth while imprinting content upon the naked eye \
-> ~ **[Wikipedia](https://en.wikipedia.org/wiki/Persistence_of_vision)** 
+> ~ **[Wikipedia](https://en.wikipedia.org/wiki/Persistence_of_vision)**
 
 This was one of the first times I used nannou without running into graphics driver issues, additionally I'm not very familiar with graphics programming math, so it was a struggle for me. By the time everyone was already beginning to reconvene the internet improved and I was able to share what I had.
 
-{{ embed_image(
-    path="one-dot-at-a-time.gif", 
-    alt="My creative code submission in action. It's a kind of salmon-ish background with white dots appearing at regular intervals where a thin black line intersects with an invisible path of a square", 
+<EmbedImage
+    src={import("one-dot-at-a-time.gif")}
+    alt="My creative code submission in action. It's a kind of salmon-ish background with white dots appearing at regular intervals where a thin black line intersects with an invisible path of a square"
     caption="My creative code submission in action, such as it is! If you watch closely you can just make out that the outline is a square."
-) }}
-    
+    width="1/2"
+/>
+
 The rest of the day I started playing with [Bevy](https://bevyengine.org/) in an attempt to start making a card-game interface. This mostly consisted of pulling up their example projects and learning what the Bevy workflow looks like.
 
 # Day 9 (Thu, 9th)

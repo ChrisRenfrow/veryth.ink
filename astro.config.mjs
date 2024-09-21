@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
 import expressiveCode from 'astro-expressive-code'
-import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
+import mdx from '@astrojs/mdx'
 
 import pageInsight from 'astro-page-insight'
 import { isProduction } from './src/helpers/utils'
@@ -11,27 +11,7 @@ export default defineConfig({
   site: isProduction(import.meta.env)
     ? 'https://veryth.ink'
     : 'http://localhost',
-  integrations: [
-    tailwind(),
-    expressiveCode({
-      themes: ['solarized-light', 'vitesse-dark'],
-      defaultProps: {
-        showLineNumbers: false,
-      },
-      styleOverrides: {
-        uiFontFamily: 'inherit',
-        frames: {
-          frameBoxShadowCssValue: 'none',
-          editorTabBarBackground: ({ theme }) =>
-            theme.colors['tab.activeBackground'],
-          editorActiveTabIndicatorTopColor: 'transparent',
-        },
-        editorActiveTabBackground: 'transparent',
-      },
-      plugins: [pluginLineNumbers()],
-    }),
-    pageInsight(),
-  ],
+  integrations: [tailwind(), expressiveCode(), pageInsight(), mdx()],
   markdown: {
     remarkPlugins: [
       /* Make/install read time plugin */

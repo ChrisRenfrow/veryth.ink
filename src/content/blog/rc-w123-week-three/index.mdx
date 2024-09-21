@@ -6,6 +6,8 @@ category: check-in
 tags: [ "recurse_center", "blaggregate", "w1'23", "rust" ]
 ---
 
+import EmbedImage from '@components/EmbedImage.astro'
+
 Install novel linux distributions on your only available machine. *Not a good move.* I absolutely knew better but I did it anyway! This is a long one so buckle-up, or just read the TLDR below. :)
 
 **TLDR;** During the weekend I started installing Guix as my operating system thinking I would be good to go once the week started. I was wrong, this ate into my week significantly but in an effort to reclaim the rest of it I spent additional time getting Arch Linux installed again, just in time to get in two days of participation at RC. This was not a great week for me but I finished on a high-note by learning some graphics programming.
@@ -23,7 +25,7 @@ This took me the rest of Saturday and Sunday to complete after ~~double~~ triple
 I woke up early, having left the installation process running late last night. It seemed to be downloading the requisite precompiled substitutes *very* slowly (dial-up speeds) so I let it do its thing hoping speeds would improve overnight. It still hadn't finished by morning. I of course had to excuse myself from all RC events today. After some troubleshooting without success, suddenly things started downloading much more quickly, and finally I was able to boot into my system. But it wasn't until late afternoon that I had a familiar desktop environment, a useable web-browser, but no developer environment to speak of. I worked late into the night trying to understand how to use this unfamiliar system and realizing a lot of things I depended on were not packaged by the Guix official channel and that I would have to make my own channel(s) to regain this functionality.
 
 # Day 12 (Tue, 14th)
-I woke up and was able to join daily checkins with surprisingly few issues. I couldn't screenshare, but at least I could participate in video calls! I had quite a backlog of coffee-chats and pairing sessions (I had forgotten to skip yesterday's matches), so I had intended to schedule them all for today to try and get caught up. I had a coffee chat, and paired on my card deck thing with someone who had been wanting to pair on it since the week prior. We had to use replit for this as I had no screensharing, which had its benefits and drawbacks. Hassle-free collaborative editing, but no shared terminal output... Both the coffee-chat and the pairing session were strained on my part. I wasn't 100% present because I was stressed out about my self-inflicted situation and on top of that I was operating on very little sleep. So I rescheduled/postponed the rest of my coffee-chats and pairings. Sometime during my morning I had decided that this situation was untenable and that I would spend the rest of the day (and the next) re-installing Arch. So after a short nap that's exactly what I did. 
+I woke up and was able to join daily checkins with surprisingly few issues. I couldn't screenshare, but at least I could participate in video calls! I had quite a backlog of coffee-chats and pairing sessions (I had forgotten to skip yesterday's matches), so I had intended to schedule them all for today to try and get caught up. I had a coffee chat, and paired on my card deck thing with someone who had been wanting to pair on it since the week prior. We had to use replit for this as I had no screensharing, which had its benefits and drawbacks. Hassle-free collaborative editing, but no shared terminal output... Both the coffee-chat and the pairing session were strained on my part. I wasn't 100% present because I was stressed out about my self-inflicted situation and on top of that I was operating on very little sleep. So I rescheduled/postponed the rest of my coffee-chats and pairings. Sometime during my morning I had decided that this situation was untenable and that I would spend the rest of the day (and the next) re-installing Arch. So after a short nap that's exactly what I did.
 
 It was kind of refreshing to be in familiar territory after stumbling around with Guix not knowing up from down, the ever-helpful Arch Wiki at my side guiding me through the process. Despite my eagerness to get back to a functional system, I decided to take a minor detour to learn how to encrypt my disk, the one nice and intuitive thing about Guix was being able to just tick an option in the graphical installer and have an encrypted disk by default. Not so in Arch of course. Once I informed myself of the options available I settled on a configuration and proceeded with the Arch installation.
 
@@ -35,11 +37,11 @@ Finally, today was the day I could rejoin everyone else in another week at RC! A
 
 I worked on what I now knew as a raytracer for the better part of 4 hours, following along with [this guide](https://github.com/ssloy/tinyraytracer/wiki/Part-1:-understandable-raytracing), and ended up with this render, which I lovingly refer to as "the most complicated way to render a circle".
 
-{{ embed_image(
-    path="tinyraytracer-first-render.png"
+<EmbedImage
+    src={import("tinyraytracer-first-render.png")}
     alt="The output from my program, a white circle against a color gradient background"
     caption="You wouldn't know it from this image, but that white circle is actually mathematically a sphere"
-)}}
+/>
 
 I spent the rest of the day writing my long-overdue summary for the week prior.
 
@@ -48,7 +50,7 @@ I had some errands to run and tasks to complete today outside of RC. But once I 
 
 See, I was making such frequent and small changes to my raytracer, that it was getting very tedious to run the program and open the resultant output, so I used `cargo-watch` to watch for changes and then run `cargo run && [open image]`. This worked fine for a little while, but unfortunately the window would open in the currently focused workspace, where I had Emacs open. This too began to get tedious as I would save not necessarily to see the output but see what the compiler was saying about my code, only to have my image viewer barge-in with the latest render. This is just how Sway works though, new windows show up in the focused workspace unless you add a statement in your configuration telling Sway to *always* put particular windows in a particular workspace. So instead, I wrote a simple bash script to help me manage this and added its invocation to the end of my `cargo-watch` command.
 
-```sh 
+```sh
 #!/bin/bash
 
 target_workspace=1
@@ -68,11 +70,12 @@ Now, when I save my project and the image renders, the window opens on my second
 
 Now I was able to work on adding lighting to my raytracer, which proved to be difficult. Somewhere along the line I must have confused some variables as things were not quite looking the way they should, but it was approaching something resembling lighting, so I still count it as a success.
 
-{{ embed_image(
-    path="tinyraytracer-approaching-lighting.png"
+<EmbedImage
+    src={import("tinyraytracer-approaching-lighting.png")}
     alt="Now a collection of circles with what looks like a radiating gradient coming from their centers still against a color gradient background"
     caption="Slightly less flat circles now, progress!"
-)}}
+    width="1/2"
+/>
 
 # Summary
 Well, that was a week. Mistakes were made, lessons were learned, and I think I did an okay job recovering. I'm looking forward to not making the same mistakes this next week and having more fun with graphics programming and finally making some real progress toward my batch goals.

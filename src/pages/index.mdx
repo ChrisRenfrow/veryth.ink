@@ -1,16 +1,14 @@
 ---
 title: Home
-description: Welcome to Chris Renfrow's personal website
 layout: ~/layouts/BaseLayout.astro
 ---
 
 import ProseWrapper from '@components/ProseWrapper.astro'
 import PostItem from '@components/PostItem.astro'
 
-import { getPosts, getProjects } from '~/helpers/queries'
+import { getPosts } from '~/helpers/queries'
 
-export const [latestPost] = await getPosts({ chronSort: true })
-export const [latestProject] = await getProjects({ chronSort: true })
+export const [latestPost] = await getPosts()
 
 <ProseWrapper>
   <span class="text-4xl text-stone-100">Hello, World<span class="text-6xl -ml-1 text-orange-600 not-prose underline-0">.</span></span>
@@ -24,7 +22,7 @@ export const [latestProject] = await getProjects({ chronSort: true })
   ## My Latest Post
 
   <div class="not-prose">
-    <PostItem post={latestPost.data} />
+    <PostItem post={latestPost.data} slug={latestPost.slug} />
   </div>
     [All posts](/blog)
 

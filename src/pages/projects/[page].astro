@@ -24,7 +24,7 @@ const { page } = Astro.props
 ---
 
 <BaseLayout
-  pageTitle={`projects ${page.lastPage > 1 ? `(${page.currentPage}/${page.lastPage})` : ''}`}
+pageTitle={`projects${page.lastPage > 1 ? ` (${page.currentPage}/${page.lastPage})` : ''}`}
 >
   <div class="flex grow flex-col">
     <ProjectList projects={page.data} />

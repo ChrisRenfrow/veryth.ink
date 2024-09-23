@@ -23,7 +23,7 @@ interface Props {
 const { page } = Astro.props
 ---
 
-<BaseLayout pageTitle={`posts (${page.currentPage}/${page.lastPage})`}>
+<BaseLayout pageTitle={`posts${page.lastPage > 1 ? ` (${page.currentPage}/${page.lastPage})` : ''}`}>
   <div class="flex grow flex-col">
     <PostList posts={page.data} />
     <Paginate {page} />

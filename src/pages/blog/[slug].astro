@@ -33,9 +33,9 @@ const hasTags = !!post.data.tags
   <article class="pb-6">
     <header class="flex flex-col space-y-2 pb-2">
       <h1 class="text-4xl font-bold lowercase">{post.data.title}</h1>
-      <div class="flex flex-row gap-4 md:flex-col">
+      <div class="ml-2 flex flex-row md:flex-col">
         <time class="font-bold"
-          ><FormattedDate date={post.data.published_on} /></time
+          >published <FormattedDate date={post.data.published_on} /></time
         >
         {
           hasCategory && (
@@ -58,19 +58,17 @@ const hasTags = !!post.data.tags
     <hr class="border-orange-700" />
   </article>
   <main>
-    <aside
-      class:list={['hidden', 'md:block', headings.length == 0 && 'hidden']}
-    >
-      {
-        hasHeadings && (
+    {
+      hasHeadings && (
+        <aside class="hidden md:block">
           <nav class="float-right min-w-56 pb-4 pl-8">
             <h3 class="font-bold">contents</h3>
-            <hr class="border-stone-400 pb-4" />
+            <hr class="border-orange-700 pb-2" />
             <Toc headings={shallowHeadings} />
           </nav>
-        )
-      }
-    </aside>
+        </aside>
+      )
+    }
     <ProseWrapper><Content /></ProseWrapper>
   </main>
   {
@@ -90,4 +88,4 @@ const hasTags = !!post.data.tags
       </footer>
     )
   }
-</BaseLayout>page
+</BaseLayout>

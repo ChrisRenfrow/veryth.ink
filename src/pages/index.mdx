@@ -24,7 +24,9 @@ export const topTags = (await getTags()).slice(0,topCount)
 
   <div class="pb-4">
     ## Latest Post
-    <PostItem post={latestPost.data} slug={latestPost.slug} />
+    <ul class="not-prose">
+      <PostItem post={latestPost.data} slug={latestPost.slug} />
+    </ul>
     [all posts &rarr;](/blog)
   </div>
 

@@ -12,7 +12,7 @@ interface Props {
 const { baseUrl="/blog", post, slug } = Astro.props
 ---
 
-<li class="min-h-16 flex flex-row gap-2">
+<li class="min-h-16 flex flex-row gap-3">
     <div class="flex flex-col min-w-24">
         <FormattedDate class="" date={post.published_on} />
         {post.category && (

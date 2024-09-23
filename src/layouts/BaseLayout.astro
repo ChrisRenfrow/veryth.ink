@@ -11,8 +11,6 @@ interface Props {
   frontmatter?: any
 }
 
-console.log(Astro.url.pathname)
-
 const { pageTitle, frontmatter } = Astro.props
 ---
 
@@ -30,7 +28,7 @@ const { pageTitle, frontmatter } = Astro.props
     </div>
     <hr class="border-stone-400 pb-6" aria-hidden="true" />
     {
-      Astro.url.pathname !== '/webrings' && (
+      !Astro.url.pathname.includes('/webrings') && (
         <aside class="pb-6" aria-labelledby="webring-heading">
           <h2 id="webring-heading" class="font-bold lowercase">
             Webrings:

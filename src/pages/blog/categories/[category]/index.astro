@@ -33,7 +33,7 @@ const page = {
 }
 ---
 
-<BaseLayout>
+<BaseLayout pageTitle={`${categoryStr} (${page.currentPage}/${page.lastPage})`}>
   <div class="flex grow flex-col">
     <h1 class="pb-5 text-2xl font-bold">
       <a

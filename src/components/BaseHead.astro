@@ -7,10 +7,10 @@ import siteInfo from '~/data/site-info.ts'
 
 const { pageTitle } = Astro.props
 const { name } = siteInfo
-const title = `${pageTitle ? `${name} ${pageTitle}` : name} $`
+const title = `${pageTitle ? `${name} | ${pageTitle}` : name} $`
 ---
 
 <meta name="generator" content={Astro.generator} charset="utf-8" />
 <link rel="icon" type="image/xml+svg" href="/favicon.svg" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>{pageTitle}</title>
+<title>{title}</title>

@@ -22,7 +22,7 @@ const page = {
 }
 ---
 
-<BaseLayout>
+<BaseLayout pageTitle={`posts (${page.currentPage}/${page.lastPage})`}>
   <div class="flex grow flex-col">
     <PostList posts={page.data} />
     <Paginate {page} />

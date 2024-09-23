@@ -29,7 +29,7 @@ const hasCategory = !!post.data.category
 const hasTags = !!post.data.tags
 ---
 
-<BaseLayout>
+<BaseLayout pageTitle={post.data.title}>
   <article class="pb-6">
     <header class="flex flex-col space-y-2 pb-2">
       <h1 class="text-4xl font-bold lowercase">{post.data.title}</h1>
@@ -90,4 +90,4 @@ const hasTags = !!post.data.tags
       </footer>
     )
   }
-</BaseLayout>
+</BaseLayout>page

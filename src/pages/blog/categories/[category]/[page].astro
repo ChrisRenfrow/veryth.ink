@@ -33,7 +33,7 @@ const { page } = Astro.props
 const { category } = Astro.params
 ---
 
-<BaseLayout>
+<BaseLayout pageTitle={`${category} (${page.currentPage}/${page.lastPage})`}>
   <h1 class="pb-5 text-2xl font-bold">
     <a
       href="/blog/categories"

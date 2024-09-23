@@ -7,6 +7,7 @@ import FormattedDate from '@components/FormattedDate.astro'
 import PostList from '@components/PostList.astro'
 
 import { getProjects, getPosts } from '~/helpers/queries'
+import ProseWrapper from '@components/ProseWrapper.astro'
 
 export const getStaticPaths = (async () => {
   const projects = await getProjects()
@@ -123,11 +124,9 @@ const {
     <section class="flex flex-col xl:flex-row xl:gap-6">
       <div class="max-w-xl">
         <h2 class="text-2xl font-bold lowercase underline">about</h2>
-        <div
-          class="prose prose-stone !max-w-none dark:prose-invert prose-headings:font-bold prose-headings:lowercase prose-headings:underline prose-h2:text-2xl prose-p:text-justify"
-        >
-          <p><Content /></p>
-        </div>
+        <ProseWrapper>
+          <Content />
+        </ProseWrapper>
       </div>
       {
         posts && posts.length > 0 && (

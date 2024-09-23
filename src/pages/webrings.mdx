@@ -1,40 +1,38 @@
 ---
+layout: '@layouts/BaseLayout.astro'
 ---
 
-import BaseLayout from '@layouts/BaseLayout.astro'
 import ProseWrapper from '@components/ProseWrapper.astro'
 import Blockquote from '@components/Blockquote.astro'
 import WebringNav from '@components/WebringNav.astro'
 
-<BaseLayout>
-  <ProseWrapper>
-    My site is part of a couple webrings.
+<ProseWrapper>
+  My site is part of a couple webrings.
 
-    ***What's a webring?***
-    <Blockquote source="Wikipedia" sourceUrl="https://en.wikipedia.org/wiki/Webring" compact fullWidth>
-    A webring (or web ring) is a collection of websites linked together in a circular structure, and usually organized    around a specific theme, often educational or social.
-    </Blockquote>
+  ***What's a webring?***
+  <Blockquote source="Wikipedia" sourceUrl="https://en.wikipedia.org/wiki/Webring" compact fullWidth>
+  A webring (or web ring) is a collection of websites linked together in a circular structure, and usually organized    around a specific theme, often educational or social.
+  </Blockquote>
 
-    ***Why?***
+  ***Why?***
 
-    For fun, mostly! I think webrings are a concept that if preserved can help strengthen the fabric of the Internet. With search engines getting less useful and social media platforms degrading, decentralized methods of networking like this have an opportunity to shine.
+  For fun, mostly! I think webrings are a concept that if preserved can help strengthen the fabric of the Internet. With search engines getting less useful and social media platforms degrading, decentralized methods of networking like this have an opportunity to shine.
 
-    Anyway, go check out my neighbors!
+  Anyway, go check out my neighbors!
 
-    <WebringNav
-      label="webring.club"
-      home="https://webring.club"
-      prev="https://webring.club/_1baKjCgGss2DStx/previous"
-      next="https://webring.club/_1baKjCgGss2DStx/next"
-      random="https://webring.club/random"
-    />
+  <WebringNav
+    label="webring.club"
+    home="https://webring.club"
+    prev="https://webring.club/_1baKjCgGss2DStx/previous"
+    next="https://webring.club/_1baKjCgGss2DStx/next"
+    random="https://webring.club/random"
+  />
 
-    <WebringNav
-      label="ring.recurse.com"
-      home="https://ring.recurse.com/"
-      prev="https://ring.recurse.com/prev?id=6"
-      next="https://ring.recurse.com/next?id=6"
-      random="https://ring.recurse.com/rand"
-    />
-  </ProseWrapper>
-</BaseLayout>
+  <WebringNav
+    label="ring.recurse.com"
+    home="https://ring.recurse.com/"
+    prev="https://ring.recurse.com/prev?id=6"
+    next="https://ring.recurse.com/next?id=6"
+    random="https://ring.recurse.com/rand"
+  />
+</ProseWrapper>

@@ -1,32 +1,33 @@
-import BaseLayout from '@layouts/BaseLayout.astro'
+---
+layout: '@layouts/BaseLayout.astro'
+---
+
 import ProseWrapper from '@components/ProseWrapper.astro'
 import FormattedDate from '@components/FormattedDate.astro'
 
 export const updatedOn = new Date("2024-09-22")
 
-<BaseLayout>
-  <ProseWrapper>
-  # Now
+<ProseWrapper>
+# Now
 
-  This is my **now** page, it's like an about page... but for *now*. Read more [here](https://nownownow.com/about).
+This is my **now** page, it's like an about page... but for *now*. Read more [here](https://nownownow.com/about).
 
-  **Updated on:** <FormattedDate date={updatedOn} />
+**Updated on:** <FormattedDate date={updatedOn} />
 
-  ---
+---
 
-  ### Work
+### Work
 
-  Currently, I am working independently for several clients as a full-stack developer and general tech consultant. Notably, for the first time ever I am working with WordPress and learning how to navigate aging hosting solutions (CPanel)... which has been an experience! I've been actively seeking opportunities to automate tasks in my work and it has absolutely paid-off.
+Currently, I am working independently for several clients as a full-stack developer and general tech consultant. Notably, for the first time ever I am working with WordPress and learning how to navigate aging hosting solutions (CPanel)... which has been an experience! I've been actively seeking opportunities to automate tasks in my work and it has absolutely paid-off.
 
-  ### Code/Tech
+### Code/Tech
 
-  I enjoy writing Rust and [have shared](/blog/tags/rust) some of my experiences with it. It would be my dream job to work with it professionally. I am also having fun with web-dev and learning how to work with [Astro](https://astro.build). The current iteration of this site was crafted with it (no theme or template), additionally I built an [emoji viewer](/projects/zulip-emoji-explorer) for the [RC community](https://recurse.com) on Zulip.
+I enjoy writing Rust and [have shared](/blog/tags/rust) some of my experiences with it. It would be my dream job to work with it professionally. I am also having fun with web-dev and learning how to work with [Astro](https://astro.build). The current iteration of this site was crafted with it (no theme or template), additionally I built an [emoji viewer](/projects/zulip-emoji-explorer) for the [RC community](https://recurse.com) on Zulip.
 
-  My stance is openly nuanced toward AI (ML, LLMs, etc.), I'll probably elaborate on this in a post... soon?
+My stance is openly nuanced toward AI (ML, LLMs, etc.), I'll probably elaborate on this in a post... soon?
 
-  ### 3d-printing
+### 3d-printing
 
-  It's been a big year for my 3d-printing hobby! At the time of writing I've printed 775m of filament this year alone (also since I started tracking with Mainsail)! The majority of that length was racked-up printing parts for a [DIY CNC machine](https://docs.v1e.com/lowrider/#printed-parts) (not for me, sadly). I recently installed a direct drive mod onto my one-and-only Ender 3 Pro, and I plan to try printing some things with [TPU](https://en.wikipedia.org/wiki/Thermoplastic_polyurethane) soon.
+It's been a big year for my 3d-printing hobby! At the time of writing I've printed 775m of filament this year alone (also since I started tracking with Mainsail)! The majority of that length was racked-up printing parts for a [DIY CNC machine](https://docs.v1e.com/lowrider/#printed-parts) (not for me, sadly). I recently installed a direct drive mod onto my one-and-only Ender 3 Pro, and I plan to try printing some things with [TPU](https://en.wikipedia.org/wiki/Thermoplastic_polyurethane) soon.
 
-  </ProseWrapper>
-</BaseLayout>
+</ProseWrapper>

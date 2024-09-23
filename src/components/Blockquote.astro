@@ -5,20 +5,41 @@ interface Props {
   sourceUrl?: string
   centered?: boolean
   right?: boolean
+  compact?: boolean
+  big?: boolean
+  fullWidth?: boolean
 }
 
-const { author, source, sourceUrl, centered, right, ...attrs } = Astro.props
+const {
+  author,
+  source,
+  sourceUrl,
+  centered,
+  right,
+  compact,
+  big,
+  fullWidth,
+  ...attrs
+} = Astro.props
 ---
 
 <blockquote
   {...attrs}
   class:list={[
-    'not-prose px-1 py-8 sm:w-2/3 sm:px-4',
+    'not-prose px-1 sm:px-4',
+    { 'sm:w-2/3': !fullWidth },
+    { 'py-8': !compact },
     { 'ml-auto': right, 'mx-auto': centered },
   ]}
 >
-  <div class="inline-flex border-l-4 border-stone-500 pl-4 text-2xl italic">
-    &ldquo;<span class="pl-2 text-lg"><slot /></span>&rdquo;
+  <div
+    class:list={[
+      'inline-flex border-l-4 border-stone-500 pl-4 italic',
+      { 'text-2xl': big },
+    ]}
+  >
+    &ldquo;<span class:list={['pl-2', { 'text-lg': big }]}><slot /></span
+    >&rdquo;
   </div>
   {
     (author || source) && (

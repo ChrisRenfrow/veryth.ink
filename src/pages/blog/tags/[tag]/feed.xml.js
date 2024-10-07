@@ -1,11 +1,8 @@
 import rss from '@astrojs/rss'
-import sanitizeHtml from 'sanitize-html'
-import MarkdownIt from 'markdown-it'
 
 import { getPosts, getTags } from '~/helpers/queries'
 import siteInfo from '~/data/site-info'
 
-const parser = new MarkdownIt()
 const { author, name } = siteInfo
 
 export async function getStaticPaths() {
@@ -25,9 +22,6 @@ export async function GET(context) {
       title: post.data.title,
       pubDate: post.data.published_on,
       description: post.data.description,
-      content: sanitizeHtml(parser.render(post.body), {
-        allowedTags: sanitizeHtml.defaults.allowedTags,
-      }),
       link: `/blog/${post.slug}`,
       author,
     })),

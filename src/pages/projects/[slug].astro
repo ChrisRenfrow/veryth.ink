@@ -123,7 +123,7 @@ const {
       }
     </section>
     <section class="flex flex-col xl:flex-row xl:gap-6">
-      <div class="pb-4">
+      <div class:list={['pb-4', { 'xl:basis-1/2': posts && posts.length > 0 }]}>
         <h2 class="text-2xl font-bold lowercase underline">about</h2>
         <ProseWrapper>
           <Content />
@@ -131,7 +131,7 @@ const {
       </div>
       {
         posts && posts.length > 0 && (
-          <div class="min-w-fit">
+          <div class="xl:basis-1/2">
             <h2 class="pb-5 text-2xl font-bold lowercase underline">
               related posts
             </h2>

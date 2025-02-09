@@ -1,0 +1,29 @@
+@layer components {
+  .loading-spinner {
+    @apply relative inline-block;
+  }
+
+  .loading-spinner::before {
+    content: '—';
+    @apply inline-block font-mono text-2xl text-orange-500;
+    animation: spinner-animation 0.5s steps(4) infinite;
+  }
+
+  @keyframes spinner-animation {
+    0% {
+      content: '—';
+    }
+    25% {
+      content: '\\';
+    }
+    50% {
+      content: '|';
+    }
+    75% {
+      content: '/';
+    }
+    100% {
+      content: '—';
+    }
+  }
+}

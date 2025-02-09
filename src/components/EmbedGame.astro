@@ -1,0 +1,95 @@
+---
+interface Props {
+  path: string
+  width?: `${number}${'px' | '%' | 'rem' | 'em' | 'vh' | 'vw'}`
+  height?: `${number}${'px' | '%' | 'rem' | 'em' | 'vh' | 'vw'}`
+  size?: `${number}${'mb' | 'kb' | 'b'}`
+}
+
+const { path, width = '100%', height = '600px', size } = Astro.props
+---
+
+<script>
+  class GameController {
+    private loadButton: HTMLElement | null
+    private gameFrame: HTMLElement | null
+    private noJs: HTMLElement | null
+    private yesJs: HTMLElement | null
+    private loadingIndicator: HTMLElement | null
+
+    constructor() {
+      this.loadButton = document.getElementById('loadGameButton')
+      this.gameFrame = document.getElementById('gameFrame')
+      this.noJs = document.getElementById('noJs')
+      this.yesJs = document.getElementById('yesJs')
+      this.loadingIndicator = document.getElementById('loadingIndicator')
+
+      this.init()
+    }
+
+    private init() {
+      this.handleJsAvailability()
+      this.setupEventListeners()
+    }
+
+    private handleJsAvailability() {
+      if (this.noJs && this.yesJs) {
+        this.noJs.style.display = 'none'
+        this.yesJs.style.display = 'block'
+      }
+    }
+
+    private setupEventListeners() {
+      this.loadButton?.addEventListener('click', () => {
+        if (this.gameFrame instanceof HTMLIFrameElement) {
+          this.gameFrame.src = this.gameFrame.dataset.src || ''
+          this.loadButton!.style.display = 'none'
+          if (this.loadingIndicator) {
+            this.loadingIndicator.style.display = 'block'
+          }
+        }
+      })
+
+      this.gameFrame?.addEventListener('load', () => {
+        if (this.loadingIndicator) {
+          this.loadingIndicator.style.display = 'none'
+        }
+      })
+    }
+  }
+
+  new GameController()
+</script>
+
+<div
+  class="relative mb-8 flex min-h-40 flex-row items-center justify-center overflow-hidden rounded border border-stone-300 bg-stone-950"
+>
+  <div id="noJs" class="p-4 font-mono">
+    <span>$ [INFO] Enable JS to play this game. :)</span>
+  </div>
+  <div id="yesJs" class="hidden w-full">
+    <button
+      id="loadGameButton"
+      class="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded bg-orange-500 px-4 py-2 font-semibold text-white hover:bg-orange-600"
+    >
+      Load Game {size && `(${size})`}
+    </button>
+    <div
+      id="loadingIndicator"
+      class="absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2"
+    >
+      <span class="loading-spinner"></span>
+      Loading...
+    </div>
+    <iframe
+      id="gameFrame"
+      src=""
+      data-src={path}
+      width={width}
+      height={height}
+      allowfullscreen
+      class="m-auto border-none"
+    >
+    </iframe>
+  </div>
+</div>

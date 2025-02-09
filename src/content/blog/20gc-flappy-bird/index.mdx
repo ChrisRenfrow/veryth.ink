@@ -1,0 +1,100 @@
+---
+title: "20 Games Challenge | Game #1 - Flappy Bird"
+description: "Sharing some of the highlights from my experience in building a rendition of Flappy Bird with Godot, and the lessons I'll be taking into the next one."
+category: "check-in"
+tags: [ "gamedev", "godot", "20gc", "blaggregate"]
+published_on: 2025-02-08
+draft: false
+---
+
+import EmbedGame from '@components/EmbedGame.astro'
+import EmbedImage from '@components/EmbedImage.astro'
+
+# Intro
+
+I completed the first game in my 20 Games Challenge journey! I talked about what this challenge entails in my previous post [here](/blog/starting-20-games-challenge), but in short, I'm building 10-20 classic games on my own (i.e. without tutorials) to learn game development. For this particular game I chose to use Godot as my game-engine.
+
+For the first game, the challenge [presents two options](https://20_games_challenge.gitlab.io/challenge/#1), [Pong](https://en.wikipedia.org/wiki/Pong) and [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird). I chose Flappy Bird because it seemed like more fun and slightly more of a challenge. If you haven't heard of it, Flappy Bird is a simple game where you play as a bird flapping through gaps between pairs of approaching pipes - one extending up from the ground, the other down from the sky - positioned at random heights. As you clear the gap between pipes, you earn a point. That's it! The game maintains a consistent difficulty level throughout, making it purely a test of timing and endurance.
+
+I had briefly played this game back during the peak of its viral fame, even installing it on my Pebble smartwatch! While I wouldn't call it particularly influential for me personally, it made its mark in video-game history and serves as a fine introduction to game development concepts.
+
+So without further ado, I'd like to share how things went, from planning to building this game - what worked well, what didn't, and what I want do differently next time. Of course, if you'd rather skip to the end to read a summary and see/play the result, by all means [please do](#summary-and-result). :)
+
+# Planning and design
+
+I have to admit the planning stage was somewhat lacking, though in fairness, Flappy Bird is a very simple game. While I eventually studied a faithful reproduction as an example, I initially relied on my memory to plan my approach. This worked fine in this case, but it quickly became clear that for future projects, I should properly play and study the target games before jumping into design and development.
+
+The first game I had ever made was in the "endless runner" genre, and my exposure to gamedev had taught me some of the common design patterns. So with this limited experience I quickly narrowed-in on the following implementation details:
+- Bird/player movement would be locked to the Y-axis
+- Pipes move in from the right on the X-axis with a randomized offset
+
+I also decided that I would be using Godot's own GDScript for this project to see how I liked it.
+
+The rest would be figured out later as I simply didn't know what I didn't know yet!
+
+# Development process
+
+***Note:** I used Godot 4.3 for this project, so any specifics mentioned here may differ if you're using an earlier or later version (howdy, time-traveler). During my time learning, I encountered many API changes/deprecations between versions when seeking advice online where sometimes it wasn't clear what version was being discussed.*
+
+Prior to taking on this project, I had gone through *[Your first 2D game](https://docs.godotengine.org/en/stable/getting_started/first_2d_game/index.html)* series found in the Godot docs which was very helpful in getting a lay of the land, and learning to think with nodes. While incomplete for a production-ready game (not that that's what I was trying to accomplish here), it was a great jumping-off point for my needs.
+
+I started with implementing the Player as a [`CharacterBody2D`](https://docs.godotengine.org/en/stable/classes/class_characterbody2d.html#characterbody2d), which gave me a foundation for the basic gameplay physics. The math was as you might imagine, pretty straightforward - define a constant force of gravity to apply to the body's velocity each tick, and set a flap velocity after input (the spacebar, in this case) is detected. With just those two components, I had something responding to my input on screen!
+
+For the pipes and ground, I initially used [`Area2D`](https://docs.godotengine.org/en/stable/classes/class_area2d.html#area2d)s. While this approach would have been fine enough, I didn't like that I'd have to subscribe to the [`body_entered`](https://docs.godotengine.org/en/stable/classes/class_area2d.html#class-area2d-signal-body-entered) signal for each area, and likely send out another signal to inform the game system of the collision. So I inverted the relationship by making the Player an `Area2D` and the pipes/ground [`StaticBody2D`](https://docs.godotengine.org/en/stable/classes/class_staticbody2d.html)s. This felt cleaner since I could handle the collisions through pattern-matching on the properties of bodies entering the player's hitbox, all from a single location.
+
+It's polite to clean up after oneself, in life and in game-dev, so I used [`VisibleOnScreenNotifier2D`](https://docs.godotengine.org/en/stable/classes/class_visibleonscreennotifier2d.html) to detect when pipes moved off-screen, at which point they would remove themselves from the scene tree. In hindsight, I could have just used simple bounds checking on the X-axis since pipes only ever leave one side of the screen, but I was still learning the engine and following patterns from the Godot tutorial.
+
+The pipes started as single, tall sprites, but I knew I needed a way to repeat the "throat" of the pipe's texture indefinitely so the base would never be visible regardless of spawn position. This led to one of my first points of friction with Godot. My attempts to implement repeating textures kept failing, and the online resources I found seemed to give outdated/wrong information. Eventually, I settled for positioning multiple sprite segments at offsets, which worked but felt hacky.
+
+When it came to the ground texture, I hit a similar wall. The thought of instancing individual ground sprites like tiles seemed... wrong. After some research, I discovered I was passing over key settings - enabling the *Sprite2D -> Region* option and setting the region width/height to tile across, plus ensuring *Texture -> Repeat* was enabled. In poking around on my own I had found the latter setting, but the keyword "region" didn't seem relevant at the time. Now I know better.
+
+<EmbedImage
+ src={import("./assets/godot-repeating-textures.png")}
+ alt="An annotated screenshot of Godot's node inspector panel, with orange lines highlighting the information relayed in the former paragraph."
+ width="2/3"
+ caption="Relevant fields to look out for with Sprite2D in Godot 4.3 if you're attempting to achieve repeating textures." />
+
+I decided to go beyond the original game by adding a [parallax](https://en.wikipedia.org/wiki/Parallax) background, mostly because I was curious what Godot had in the way of support for this. I doodled some quick layers in Aseprite and implemented them using [`ParallaxBackground`](https://docs.godotengine.org/en/stable/classes/class_parallaxbackground.html#parallaxbackground) with [`ParallaxLayer`](https://docs.godotengine.org/en/stable/classes/class_parallaxlayer.html#class-parallaxlayer)s. The result was basic but effective.
+
+***Note:** At the time of writing, there's an experimental node called [`Parallax2D`](https://docs.godotengine.org/en/stable/classes/class_parallax2d.html#parallax2d) which is meant to replace `ParallaxBackground` and `ParallaxLayer`. I went with the older method because I didn't want to get hung-up on any unexpected behavior (I'm learning - nearly everything is unexpected behavior to me right now).*
+
+And finally, I added game state handling and UI for starting/restarting, using techniques which borrowed heavily from the Godot first 2D game tutorial, and I implemented a basic scoring mechanic. With that, I had a functional rendition of Flappy Bird! 🎉
+
+# What I'd do differently
+
+Calling what I've made a complete game feels generous - there's a lot missing that would make it feel more polished, like basic sound effects or the ability to save and load high scores. For the next title, I would like to work harder to make something I can more confidently call a finished product, or at least a solid [vertical slice](https://en.wikipedia.org/wiki/Vertical_slice).
+
+I wish I had used Git from the start to track my progression, but I kept getting caught-up in the excitement of building whenever I found time for it. For the next round I'll definitely be committing early and often - it's just good practice!
+
+The project structure itself could use some improvement, even simplification in some places. This could have been helped by spending more time thinking through problems and putting-on my systems design hat more.
+
+And finally, I regret not taking more notes and logging my activity/progress more often. Between this and not using Git, it made writing this post more difficult than it had to be. :)
+
+# Summary and Result
+
+This was a blast to build. While I encountered a few rough edges with Godot, any struggle I encountered came down to being new to the engine and my general lack of experience in game-dev. Having some familiarity with Python, I found GDScript natural and satisfying to work in, and I'm looking forward to using it more in future games. I do have some regrets about how I approached certain aspects, but ultimately it was a valuable learning experience that has me excited to tackle the next challenge.
+
+And of course, here's the web-version of the game in all its glory! I think it's *very* cool that I can build a game and target a bunch of different platforms without much fuss at all, we'll see how this experience holds for subsequent games.
+
+**Controls:** ( Space | Left-click | Touch ) -> Flap
+
+<EmbedGame
+  path="/games/20gc-flappy-bird/index.html"
+  width="360px"
+  height="540px"
+  size="35mb" />
+
+*I've left a rather embarassing bug in this version of the game, see if you can find it!*
+
+# Conclusion
+
+Thanks for reading! If you have any questions, comments, or feedback, I'd like to hear from you. I'm trying to figure out who I'm writing these posts for - aside from myself (public journaling for soft-accountability). So if you're following along and want to see more of a particular facet of my process, let me know!
+
+You can email me at [contact@chrisrenfrow.me](mailto:contact@chrisrenfrow.me) or find me on Mastodon [@crenfrow@hachyderm.io](https://hachyderm.io/@crenfrow). If you'd like to get my posts directly, you can subscribe to my [feed](https://aboutfeeds.com/) by pointing your favorite feed reader at `https://veryth.ink/blog/feed.xml`.
+
+The next game will be *Jetpack Joyride*! You can get a sneak peek at my progress (as I'm well into it at the time of writing) by visiting my [devlog thread](https://hachyderm.io/@crenfrow/113816775782392303) on Mastodon, I also use the `#cr20gc` hashtag to mark my posts as I trek through this challenge.
+
+# Resources
+- [20 Games Challenge](https://20_games_challenge.gitlab.io/challenge/)
+- [Godot Getting Started Guide - Your first 2D game](https://docs.godotengine.org/en/stable/getting_started/first_2d_game/index.html)
+- [Godot Manual - 2D Parallax](https://docs.godotengine.org/en/stable/tutorials/2d/2d_parallax.html)

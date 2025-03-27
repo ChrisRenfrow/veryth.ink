@@ -43,8 +43,7 @@ const siteInfo: SiteInfo = {
     {
       platform: 'mastodon',
       text: 'Follow me on Mastodon',
-      // me: "https://recurse.social/crenfrow",
-      href: 'https://recurse.social/crenfrow',
+      href: 'https://hachyderm.io/@crenfrow',
       icon: 'mastodon',
     },
     {

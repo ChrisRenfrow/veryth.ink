@@ -1,0 +1,159 @@
+---
+title: "20 Games Challenge | Game #2 - Jetpack Joyride"
+description: "Sharing the ups and downs in the latest leg of my game-dev adventure. Play the result at the end!"
+published_on: 2025-03-30
+category: "check-in"
+tags: ["20gc", "blaggregate", "gamedev", "godot"]
+draft: false
+---
+
+import EmbedGame from '@components/EmbedGame.astro'
+import EmbedImage from '@components/EmbedImage.astro'
+
+# Intro
+
+I've crossed another game off of my list in The 20 Games Challenge![^1] Last time [I made *Flappy Bird*](/blog/20gc-flappy-bird) in Godot. The next challenger was *Jetpack Joyride*.
+
+*Jetpack Joyride* is a title that emerged from developer *Halfbrick Studios* in 2011 for iOS, and made its way onto a number of other platforms in the years following as its popularity soared.[^2] I myself spent an embarassing amount of time playing on my (first, and only) iPhone back then, so it was something I easily remembered and felt drawn to making myself when I saw it recommended in The 20 Games Challenge line-up.
+
+The objective of *Jetpack Joyride* is somewhat similar to that of *Flappy Bird*'s, but instead of tapping for bursts of altitude, the player simply taps and holds to emit bullets from their infinitely loaded machine-gun jetpack, propelling them vertically, releasing to descend. Instead of the same obstacles at different heights, the player is presented with a handful of hazards in many different patterns and sequences. These hazards include zappers, lasers, and rockets/missiles. 
+
+As usual, if you'd like to skip the technical details to read a short summary and play the game itself, [please do](#summary--result)! I won't mind. :)
+
+Now, here's how my journey began.
+
+# Planning Phase
+
+Straight away, I learned my lesson from the previous game and started by actually playing the game to refresh my memory. At the time I wasn't even sure it would be available still after >10y, but there it was! It was almost as fun as I remembered, though can't say I was happy to be reminded of all the gross monetization tactics mobile games normalized over the years... but I won't get into that here. Also partially forgotten were the variety of vehicles the player could unlock and chance upon during play, as well as the permanent upgrades, cosmetics, and the consumable items the player could purchase with the earned or purchased freemium currency.
+
+With a larger scope than I had remembered, I decided I would skip vehicles, the regrettable slot-machine mini-game, and all items aside from coins (collecting shiny things can be fun at face-value). Not quite a "vertical slice", but I felt it was a reasonable compromise.
+
+As I was jotting down the elements of the game as I played, some particular design patterns began to emerge.
+
+**Hazards:**
+- There were two broad categories of hazards which I called "Spatial" and "Timed".
+	- Spatial hazards are comprised solely of Zappers, which simply move at a constant rate toward the player.
+	- Timed hazards contain Missiles and Lasers:
+		- Missiles issue a warning when off-screen, wait for a moment, then quickly enter from the right, flying off-screen or colliding with the player.
+		- Laser "diodes" move on-screen from the left and right edges of the scene horizontally aligned, charge for a moment, fire continuously for another moment, then move off-screen in reverse.
+		- Each of these could be delayed before their "charge" sequences to add variety to arrangements.
+
+**Segments:**
+- I figured I could pre-design composable chunks of hazards as individual scenes, these could be called "segments".
+- These segments could contain any one of the three hazard types if desired (**spoiler:** this was a bad idea).
+- Segments would be chained together by a system which was responsible for selecting/loading, and unloading scenes from the scene tree.
+
+With an outline on how I wanted to approach the hazards, the rest of the game's components were things I felt confident in solving as I went. The player physics were only a few steps away from *Flappy Bird*'s, UI could be very basic - I decided to get to work
+
+# Development
+
+I naturally started with the hazards, specifically the zappers as they seemed least complex. Not long after laying down the foundation of the zapper I realized that setting its length would require runtime calculations to set the length of the beam and end-node positions, which wouldn't update in the preview window. I thought to myself:
+
+> Well, there must be a way to run code in the editor or something, right?
+
+Which was how I encountered [GDScript's `@tool` annotation](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_basics.html#tool-mode) for doing exactly that! With this, I was able to set the length of the beam and see it update live in the preview window. Neat!
+
+The rest of the hazards came along well and were relatively easy to implement, I used simple state-machines and a handful of timers to manage most of their behaviors. Once the core hazards were done, it came time to implement the system responsible for queuing segments.
+
+First, I wanted to make sure my assumptions about loading scenes in Godot were correct, the chief assumption being "I can load scenes at runtime from a yet-to-be-determined resource path", so I made some segment scenes, threw them in a directory and wrote some code for loading all of the `.tscn` files under a directory into an `Array`. I used the `DirAccess` class to get all the files, and loaded each as a `PackedScene`, and it seemed to be working (foreshadowing - recall this when you get to [the "little lessons" section](#little-lessons-i-learned)).
+
+Then, I moved on to the bit that made me question my sanity a little, writing the code to determine when to spawn the next segment.
+
+This is the section of my journey where I realized that I could have given a bit more thought to the design of my Segment Manager. And I don't mean like, finding a more clever solution, I mean just sticking to a more pragmatic implementation and then making it more clever later if it made sense. See, I foolishly thought it would be really *rad* if I could just throw whatever combination of hazards I wanted into a segment and then still use a common interface. And it absolutely would have worked if I had banged my head on it longer, however it absolutely wouldn't have been worth it if I did.
+
+Okay, let me back up a bit.
+
+Remember how I broadly categorized the two hazard types as "spatial" and "timed"? Well, my thought was that each segment, which could contain *any* kind of hazard, would be sort of laid one after the other like a line of blocks being pushed onto the scene from the right. The segment manager would move these blocks, or segments, at a gradually increasing rate, and then just as a gap might become visible, pop another segment in on the right.
+
+> But wait, how will you know how much space a timed hazard will occupy?
+
+Well, we get each child timed hazard in a segment and then sum the wait times of all associated timers for each, then multiply the total by the current speed. That should work!
+
+> But if the speed is constantly increasing, doesn't that mean the segment's "length" would be scaling constantly as well?
+
+Hmm, okay well-
+
+> Oh, and if you don't account for the amount of time it takes for a hazard to move itself off-screen (missile travel, laser diode entrance/exit), your spatial calculation will be slightly off, which only scales as the speed increases, which means segments and their child hazards will start aggressively overlapping with one-another as the game progresses.
+
+Ugh.
+
+All of these problems are things I *could* have solved, but in the end, after wasting a lot of time, I decided it would be best to simplify in two ways:
+
+1. Limit segments to one kind of hazard per segment.
+
+2. Ditch the spatial calculations for a simple "is the current segment (and its children) off-screen" approach.
+
+This made things much simpler from here on, it even gave me more opportunity and control over what kind of segments were spawning, and how often. A huge win if you ask me! Though, I wasn't done over-complicating things for myself, I'll spare you the details (you can dig through the [carnage](https://github.com/ChrisRenfrow/20gc-jetpack-joyride/commits/main/) for that story, if you really want).
+
+During the unfolding of the saga above, I was taking breaks to work on the art. This game marks my first experience playing with particles! The player's jetpack came first, with the bullets, casings, and muzzle exhaust. Then the missiles with their trails, then the explosion, of course (though I implemented this far later). It took some time to find my way around Godot's particle system, but I got there in the end. Probably one of the least intuitive moments I had was setting-up a particle system for the "shrapnel" of the missile where I wanted to randomly emit a selection of textures, I might write about that as a little post or something because I only found out how to do this through a video[^3].
+
+In the source game, there are little "scientists" which walk around and react to the player as they fire their jetpack within awareness range. I wanted to add something similar, but not human, so I went with little robots designed after some [food delivery robots](https://en.wikipedia.org/wiki/Avride) that have been invading some university campuses in the US. I think they turned out pretty great! In fact, they're almost too cute to be subjected to the harm of clumsily bumping into hazards, but we'll just say that reaction is exactly what `${FACELESS_CORPORATION}` is counting on... 👀
+
+<EmbedImage
+ src={import("./assets/minion-composite.gif")}
+ alt="Four animated pixel art sprites of a small, grey, rectangular, 6-wheeled robot in varied states of emotion or action. It has a black screen 'face' with bright solid-white eyes and a small, bright-reddish-orange flag. There is a cylindrical shape jutting out of its head which looks like some kind of sensor housing. Upper-left: shows the robot rolling to the left casually/happily. Upper right: shows the robot emoting a cartoonish state of shock with a red exclamation mark above it, its eyes wide and body recoiling. Lower left: shows the robot rolling to the right while emitting emotive sweat drops and with an exaggerated wheel pitch. Lower right: shows the robot motionless and crumpled on the ground, its face display cracked and glitching with X-es for eyes, the sensor column broken off, flag bent over, and wheels at odd angles."
+ width="1/2"
+ caption="Ain't that just the cutest rolling suite of spyware you've ever seen?" />
+
+I wanted to keep improving and adding features I had planned on, but I had begun to run behind schedule and frankly, my fulfillment working on this project was waning, so it was time to finally call the game "done."
+
+# Little lessons I learned
+
+Here are some quick lessons I wanted to share without getting into the whole story behind them for the sake of brevity.
+
+- It's pretty easy and effective to add a "freeze-frame" effect when the player is hit by briefly toggling `get_tree().paused` on and then off after a delay.
+  - You can also set a node's processing mode to `always` to ignore the pause state, this can be used to play certain animations or particles during the freeze-frame.
+- [`AnimationPlayer`](https://docs.godotengine.org/en/stable/classes/class_animationplayer.html) is great, unless you want to animate transform properties of something that's a child of a container, like a `Label` inside a `Control` node - then it's time to learn how to use [`Tween`](https://docs.godotengine.org/en/stable/classes/class_tween.html)s!
+  - Tweens are very cool and powerful, but might be kind of hard to grok at first. YMMV
+- It's always a good idea to test your project outside of the development context early and often. (e.g. export your project as a release and run it)
+- Related to the above - dynamically loading scenes at runtime (like I did with segments) means you need to account for the fact that Godot remaps your resource files during the release build, and loading these files by the intuitive path will likely result in an error.
+  - Instead of using [`DirAccess`](https://docs.godotengine.org/en/stable/classes/class_diraccess.html) to traverse resource paths, you may want to consider using [`ResourceLoader`](https://docs.godotengine.org/en/stable/classes/class_resourceloader.html) instead, which abstracts any remaps away![^4]
+
+# What I'd do differently
+
+1. Do the dumb solve first.
+	- This bit me really hard with my over-generalized segment/hazard design, I should have started with something less complex that worked.
+	- If I had done this, I might have been able to get to the other planned features.
+2. Prioritize adding sound effects and a local scoreboard.
+	- I put both of these things off for so long that I never got around to them. But I plan to amend that in the next game!
+3. Use freely-licensed art as placeholder assets.
+	- I like to get art practice in when I can, but it became a stumbling block in this exercise.
+	- My main objective is to learn game-*development*, if I can get to the art, that's a bonus!
+4. More effects!
+	- I regret not making the bullets interact with the environment more, like the actual game.
+
+# Summary & Result
+
+Overall I enjoyed this project. As my enthusiasm waned, I had to remind myself that this was a pretty big step above Flappy Bird, and pretty great as the third solo game project of my game-dev "career". This actually feels like a game to me despite all the obvious rough-edges, and that's pretty special! I learned a lot, and I'm eager to carry it all forward into the next game.
+
+Okay, without further ado here's the web-version of the game for you to experience.
+
+**Controls:** Tap | LMB | Space -> Jetpack thrust
+
+<a href="/games/20gc-jetpack-joyride/index.html">Click here to play!</a>[^5]
+
+The source is freely available for reference (unlicensed at the moment) and can be found [on GitHub](https://github.com/ChrisRenfrow/20gc-jetpack-joyride).
+
+# What's next?
+
+In my [original line-up](/blog/starting-20-games-challenge#the-20-games-challenge), I listed *River Raid* as the next game I would be recreating. While I was interested to learn a bit about the history of the game (made by one of the first female game developers, Carol Shaw[^6]) I wasn't excited to build it myself. I kept thinking about influential games of my youth and *Legend of Zelda: A Link to the Past* kept coming to mind, but it felt like a nearly astronomical jump in scope and complexity from this game, even if I trimmed it down to a very (*very*) slim vertical slice.
+
+Long story short, I was inspired by [@stux@mastodon.social](https://mastodon.social/@stux) to build a *Vampire Survivors*-esque game, so that's what I'm working on next![^7]
+
+# Conclusion
+
+That's all folks! Thank you for reading this far, I really appreciate it, and I hope you've enjoyed or got something out of what I had to share.
+
+If you want to be notified about my new posts as they come out, you can subscribe to my RSS feed by pointing your favorite feed-reader at: `veryth.ink/blog/feed.xml`
+
+If you happen to have any questions about what I've written, or notes about what you'd like to see more of, you can absolutely email me at `dev[at]chrisrenfrow[dot]me`. Same goes if you find any typos or issues with my site/post, I'm trying to get better at this whole thing after all, so feedback is welcome.
+
+Until next time! 👋
+
+[^1]: What is "The 20 Games Challenge"? TLDR; I'm building my own take on 10-20 classic games using the game-engine of my choice with as little guidance as possible. You can read more about this [here](/blog/starting-20-games-challenge).
+[^2]: https://en.wikipedia.org/wiki/Jetpack_Joyride
+[^3]: I may not prefer to watch videos to learn things like this, but I'm grateful to *tissue inu* for their [helpful video](https://www.youtube.com/watch?v=PMZ7yBwleik)!
+[^4]: For more on Godot's resources and imports system, check out [this great post](https://rie.codeberg.page/blog/asset_import/) by Rie! 
+[^5]: I wanted to embed this like I managed to with the last game, but you know what? Managing non-fractional scaling in an iframe is hard!
+[^6]: https://en.wikipedia.org/wiki/River_Raid
+[^7]: Don't worry, I'm definitely planning on making my own little slice of *LoZ:LttP* later in my journey.

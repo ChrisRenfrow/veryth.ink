@@ -36,7 +36,7 @@ This all put me in a bit of a funk and I sat with it for far too long. Later, I 
 
 # Day 4 (Thu, 2nd)
 
-I really made it a point to leave the funk of the day prior behind by throwing myself into (slightly too many) activities on this day. I hosted **Daily Checkin**, paired on a project I had started outside of the batch ([zulipsis](https://github.com/ChrisRenfrow/zulipsis)), had a coffee-chat with a batch-mate, attended a recurring event called **Tool Talk Time** and shared some (cli) tools I've found useful (no, it wasn't [`timew`](/blog/how-i-track-my-time)), and finally attended **Weekly Presentations**.
+I really made it a point to leave the funk of the day prior behind by throwing myself into (slightly too many) activities on this day. I hosted **Daily Checkin**, paired on a project I had started outside of the batch ([zulipsis](https://github.com/livviest/zulipsis)), had a coffee-chat with a batch-mate, attended a recurring event called **Tool Talk Time** and shared some (cli) tools I've found useful (no, it wasn't [`timew`](/blog/how-i-track-my-time)), and finally attended **Weekly Presentations**.
 
 I was too tired to get much else done, but I signed-off feeling satisfied with my day.
 

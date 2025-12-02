@@ -41,9 +41,9 @@ The full list suggested by *The 20 Games Challenge* can be found [here](https://
 
 The aim of this challenge goes beyond simply completing games; it’s about immersing myself in the world of game development and truly enjoying the experience. It represents my first concrete steps on this path which I've dreamed of starting since I was a child. I’m excited to learn and embrace the creative process every step of the way!
 
-You can follow my progress in [this Mastodon thread](https://hachyderm.io/@crenfrow/113816775782392303) (and under the hashtag `#cr20gc`), where I’ll be posting regular updates as I work. I’ll also be blogging my updates here each month under the tag [`#20gc`](/blog/tags/20gc), or more broadly under [`#gamedev`](/blog/tags/gamedev). In fact, at the time of writing, I've already wrapped-up *Flappy Bird* and started *Jetpack Joyride* and am very excited to share my experience so far.
+You can follow my progress in [this Mastodon thread](https://tech.lgbt/@livvie/113816775782392303) (and under the hashtag `#cr20gc`), where I’ll be posting regular updates as I work. I’ll also be blogging my updates here each month under the tag [`#20gc`](/blog/tags/20gc), or more broadly under [`#gamedev`](/blog/tags/gamedev). In fact, at the time of writing, I've already wrapped-up *Flappy Bird* and started *Jetpack Joyride* and am very excited to share my experience so far.
 
-If you've been inspired to try this challenge yourself I'd love to hear from you! You can [email](mailto:contact@chrisrenfrow.me) me, or reach out to me on Mastodon [@crenfrow@hachyderm.io](https://hachyderm.io/@crenfrow).
+If you've been inspired to try this challenge yourself I'd love to hear from you! You can [email](mailto:liv@veryth.ink) me, or reach out to me on Mastodon [@livvie@tech.lgbt](https://tech.lgbt/@livvie).
 
 # Additional Resources
 - [*The 20 Games Challenge* website](https://20_games_challenge.gitlab.io/)

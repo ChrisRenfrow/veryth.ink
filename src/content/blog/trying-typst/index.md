@@ -52,4 +52,4 @@ I think Typst works best for someone a bit like me, who doesn't yet need to gene
 
 # Conclusion
 
-I hope this helps anyone who has perhaps heard of Typst but wasn't sure about getting started with it, or perhaps is their first time hearing of it! If you have any questions about Typst, comments about what I wrote, or just want to say hi, feel free to drop an email to dev@chrisrenfrow.me or find me on other platforms. I'd enjoy hearing from you. :)
+I hope this helps anyone who has perhaps heard of Typst but wasn't sure about getting started with it, or perhaps is their first time hearing of it! If you have any questions about Typst, comments about what I wrote, or just want to say hi, feel free to drop an email to liv@veryth.ink or find me on other platforms. I'd enjoy hearing from you. :)

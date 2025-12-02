@@ -1,8 +1,8 @@
 ---
 name: 'zulipsis'
 description: 'A fun tool for automatically cycling your Zulip status. Built with Rust.'
-homepage: 'https://github.com/chrisrenfrow/zulipsis'
-repository: 'https://github.com/chrisrenfrow/zulipsis'
+homepage: 'https://github.com/livviest/zulipsis'
+repository: 'https://github.com/livviest/zulipsis'
 started_on: 2023-10-10
 finished_on: 2023-11-09
 status: 'on-hold'

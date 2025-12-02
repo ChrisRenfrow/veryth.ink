@@ -2,7 +2,7 @@
 name: 'veryth.ink'
 description: 'My personal website and blog. Built as a static site using Astro.'
 homepage: 'https://veryth.ink'
-repository: 'https://github.com/chrisrenfrow/veryth.ink'
+repository: 'https://github.com/livviest/veryth.ink'
 started_on: 2024-08-01
 status: 'active'
 associated_tags: ['verythink']

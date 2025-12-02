@@ -2,7 +2,6 @@
 title: "Simple Remote System Notifications"
 description: "How I configured a server to notify my personal computer and smart-phone when I have new mail."
 published_on: 2024-04-28
-author: "Chris Renfrow"
 category: workflow
 tags: [ "bash", "ntfy", "systemd", "curl", "linux", "blaggregate", "mail" ]
 ---

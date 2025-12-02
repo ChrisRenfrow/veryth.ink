@@ -2,7 +2,7 @@
 name: 'Zulip Emoji Explorer'
 description: "An Astro web-app to view custom emoji uploaded by the RC community to RC's Zulip"
 homepage: 'https://zulip-emoji.vercel.app'
-repository: 'https://github.com/chrisrenfrow/zulip-emoji-feed'
+repository: 'https://github.com/livviest/zulip-emoji-feed'
 started_on: 2024-09-30
 status: 'active'
 associated_tags: ['zulip-emoji']
